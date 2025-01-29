@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workloads', function (Blueprint $table) {
+        Schema::create('workload', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id')->index();
             $table->unsignedBigInteger('booking_id')->index();
             $table->smallInteger('workload_status')->default(0);
 
-            $table->foreign('employee_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
             $table->timestamps();
         });
