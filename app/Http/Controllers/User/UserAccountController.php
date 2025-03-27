@@ -11,11 +11,14 @@ use Illuminate\Support\Facades\Hash;
 
 class UserAccountController extends BaseController
 {
+    public function viewAccounts(Request $request)
+    {
+        $users = User::with([''])
+    }
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateUserRequest  $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function updateCurrent(UpdateUserRequest $request)
     {
@@ -24,6 +27,10 @@ class UserAccountController extends BaseController
         return $this->sendResponse('User updated successfully.', new UserResource($user));
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     */
     public function updatePassword(UpdatePasswordRequest $request)
     {
         $request->validated();

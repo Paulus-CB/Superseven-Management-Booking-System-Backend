@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\QueryHelper;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class BaseController extends Controller
 {
@@ -43,5 +45,31 @@ class BaseController extends Controller
         $response += $opt;
 
         return response()->json($response, $code);
+    }
+
+    /**
+     * Callback for search functionality
+     *
+     * @param  Builder  $query
+     * @param  Request  $request
+     * @param  array  $targets
+     * @return Builder
+     */
+    public function searchCallback(Builder $query, Request $request, array $targets)
+    {
+        return QueryHelper::searchCallback($query, $request, $targets);
+    }
+
+    /**
+     * Callback for filter functionality
+     *
+     * @param  Builder  $query
+     * @param  Request  $request
+     * @param  array  $queries
+     * @return Builder
+     */
+    public function filterCallback(Builder $query, Request $request, array $queries)
+    {
+        return QueryHelper::filterCallback($query, $request, $queries);
     }
 }

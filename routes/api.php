@@ -12,10 +12,14 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     // User
-    Route::prefix('/user')->group(function () {
+    Route::prefix('/users')->group(function () {
+        //Authenticated
         Route::get('/current', [AuthController::class, 'user']);
         Route::post('/update', [UserAccountController::class, 'updateCurrent']);
         Route::post('/update-password', [UserAccountController::class, 'updatePassword']);
+
+        //Accounts
+        Route::get('/', [UserAccountController::class, 'viewAccounts']);
     });
 
 
