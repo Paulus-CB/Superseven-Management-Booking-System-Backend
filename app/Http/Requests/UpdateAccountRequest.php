@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterFormRequest extends FormRequest
+class UpdateAccountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,23 +27,17 @@ class RegisterFormRequest extends FormRequest
             'first_name' => 'required|string|max:30',
             'mid_name' => 'nullable|string|max:30',
             'last_name' => 'required|string|max:30',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'confirm_password' => 'required|same:password',
+            'email' => 'required|email|unique:users,email,' . $this->route('userId'),
             'contact_no' => [
                 'required',
                 'regex:/^(09\d{9}|\\+639\d{9})$/'
             ],
             'address' => 'nullable|string|max:100',
-            'customer_type' => 'required|integer',
+            'user_type' => 'nullable|integer',
+            'status' => 'nullable|boolean'
         ];
     }
 
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [
@@ -58,24 +52,19 @@ class RegisterFormRequest extends FormRequest
             'email.required' => 'Email is required.',
             'email.email' => 'Email must be a valid email address.',
             'email.unique' => 'Email is already taken.',
-            'password.required' => 'Password is required.',
-            'password.string' => 'Password must be a string.',
-            'password.min' => 'Password must be at least 8 characters.',
-            'confirm_password.required' => 'Confirm password is required.',
-            'confirm_password.same' => 'Password and confirm password must match.',
             'contact_no.required' => 'Contact number is required.',
-            'contact_no.regex' => 'Contact number must be a valid Philippine number (e.g., 09171234567 or +639171234567).',
+            'contact_no.regex' => 'Contact number must be a valid phone number.',
             'address.string' => 'Address must be a string.',
             'address.max' => 'Address must not exceed 100 characters.',
-            'customer_type.required' => 'Customer type is required.',
-            'customer_type.integer' => 'Customer type must be an integer.',
+            'user_type.integer' => 'User type must be an integer.',
+            'status.boolean' => 'Status must be a boolean value.'
         ];
     }
 
-    /**
+        /**
      * Handle a failed validation attempt.
      *
-     * @param Validator $validator
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
      */
     protected function failedValidation(Validator $validator)
     {

@@ -25,9 +25,12 @@ class UserResource extends JsonResource
             'contact_num' => $this->contact_num,
             'address' => $this->address,
             'email_verified_at' => $this->email_verified_at,
-            'user_type' => $this->customer() ? 'Customer' : 'Employee',
-            // 'user_role' => $this->customer() ? $this->customer->customer_type : $this->employee->employee_type,
-            'user_role' => $this->customer() ? User::ROLE_TYPES[$this->customer->customer_type] : User::ROLE_TYPES[$this->employee->employee_type],
+            'user_type' => $this->customer ? 'Customer' : ($this->employee ? 'Employee' : null),
+            'user_role' => $this->customer
+                ? User::ROLE_TYPES[$this->customer->customer_type]
+                : ($this->employee
+                    ? User::ROLE_TYPES[$this->employee->employee_type]
+                    : null),
             'status' => $this->status,
         ];
     }
