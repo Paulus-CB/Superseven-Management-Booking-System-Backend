@@ -9,13 +9,8 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class UserAccountController extends BaseController
+class UserController extends BaseController
 {
-    public function viewAccounts(Request $request)
-    {
-        $users = User::with([''])
-    }
-
     /**
      * Update the specified resource in storage.
      *
