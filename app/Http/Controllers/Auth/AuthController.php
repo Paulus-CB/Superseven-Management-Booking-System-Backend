@@ -80,6 +80,11 @@ class AuthController extends BaseController
         // Generate token for API authentication
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Check if the user is active
+        if ($user->status !== 'active') {
+            return $this->sendError('Your account is disabled contact support', 403);
+        }
+
         return $this->sendResponse('User logged in successfully.', new UserResource($user), [
             'access_token' => $token,
             'token_type' => 'Bearer',
