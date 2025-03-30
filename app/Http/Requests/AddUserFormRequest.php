@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateUserRequest extends FormRequest
+class AddUserFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,21 +27,16 @@ class UpdateUserRequest extends FormRequest
             'first_name' => 'required|string|max:30',
             'mid_name' => 'nullable|string|max:30',
             'last_name' => 'required|string|max:30',
-            'email' => 'required|email|unique:users,email,' . request()->user()->id,
+            'email' => 'required|email|unique:users,email',
             'contact_no' => [
-                'required',
+                'nullable',
                 'regex:/^(09\d{9}|\\+639\d{9})$/'
             ],
             'address' => 'nullable|string|max:100',
-            'user_type' => 'nullable|integer',
+            'user_type' => 'required|integer',
         ];
     }
 
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [
@@ -56,18 +51,18 @@ class UpdateUserRequest extends FormRequest
             'email.required' => 'Email is required.',
             'email.email' => 'Email must be a valid email address.',
             'email.unique' => 'Email is already taken.',
-            'contact_no.required' => 'Contact number is required.',
-            'contact_no.regex' => 'Contact number must be a valid phone number.',
+            'contact_no.regex' => 'Contact number must be a valid Philippine mobile number.',
             'address.string' => 'Address must be a string.',
             'address.max' => 'Address must not exceed 100 characters.',
-            'user_type.integer' => 'User type must be an integer.',
+            'user_type.required' => 'User type type is required.',
+            'user_type.integer' => 'User type type must be an integer.',
         ];
     }
 
     /**
      * Handle a failed validation attempt.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param Validator $validator
      */
     protected function failedValidation(Validator $validator)
     {

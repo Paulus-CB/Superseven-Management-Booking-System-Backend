@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateUserRequest extends FormRequest
+class UpdateAccountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,21 +27,17 @@ class UpdateUserRequest extends FormRequest
             'first_name' => 'required|string|max:30',
             'mid_name' => 'nullable|string|max:30',
             'last_name' => 'required|string|max:30',
-            'email' => 'required|email|unique:users,email,' . request()->user()->id,
+            'email' => 'required|email|unique:users,email,' . $this->route('userId'),
             'contact_no' => [
                 'required',
                 'regex:/^(09\d{9}|\\+639\d{9})$/'
             ],
             'address' => 'nullable|string|max:100',
             'user_type' => 'nullable|integer',
+            'status' => 'nullable|boolean'
         ];
     }
 
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [
@@ -61,10 +57,11 @@ class UpdateUserRequest extends FormRequest
             'address.string' => 'Address must be a string.',
             'address.max' => 'Address must not exceed 100 characters.',
             'user_type.integer' => 'User type must be an integer.',
+            'status.boolean' => 'Status must be a boolean value.'
         ];
     }
 
-    /**
+        /**
      * Handle a failed validation attempt.
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
