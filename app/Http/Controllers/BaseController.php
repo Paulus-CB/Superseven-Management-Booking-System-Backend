@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\QueryHelper;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class BaseController extends Controller
 {
@@ -45,6 +47,22 @@ class BaseController extends Controller
         $response += $opt;
 
         return response()->json($response, $code);
+    }
+
+    public function sendException(Exception $exception, string $extra = '')
+    {
+        $response = [
+            'status' => false,
+            'message' => $exception->getMessage(),
+        ];
+
+        Log::error('API EXCEPTION', [
+            'message' => $exception->getMessage(),
+            'filename' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'extra' => $extra,
+        ]);
+        return response()->json($response, 500);
     }
 
     /**
