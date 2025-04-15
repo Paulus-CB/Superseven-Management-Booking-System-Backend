@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddonController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\User\Customer\CustomerAccountController;
@@ -42,5 +43,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/add', [PackageController::class, 'addPackage']);
         Route::post('/{id}', [PackageController::class, 'updatePackage']);
         Route::post('/{id}/delete', [PackageController::class, 'deletePackage']);
+    });
+
+    //Addon
+    Route::prefix('/addons')->group(function () {
+        Route::get('', [AddonController::class, 'getAddons']);
+        Route::post('/add', [AddonController::class, 'addAddon']);
+        Route::post('/{id}', [AddonController::class, 'updateAddon']);
+        Route::post('/{id}/delete', [AddonController::class, 'deleteAddon']);
     });
 });
