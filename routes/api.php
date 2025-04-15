@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\User\Customer\CustomerAccountController;
 use App\Http\Controllers\User\Employee\EmployeeAccountController;
 use App\Http\Controllers\User\UserController;
@@ -33,5 +34,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('', [CustomerAccountController::class, 'getCustomers']);
         Route::post('/add', [CustomerAccountController::class, 'addUser']);
         Route::post('/{userId}', [CustomerAccountController::class, 'updateUser']);
+    });
+
+    //Package
+    Route::prefix('/packages')->group(function () {
+        Route::get('', [PackageController::class, 'getPackages']);
+        Route::post('/add', [PackageController::class, 'addPackage']);
+        Route::post('/{id}', [PackageController::class, 'updatePackage']);
+        Route::post('/{id}/delete', [PackageController::class, 'deletePackage']);
     });
 });
