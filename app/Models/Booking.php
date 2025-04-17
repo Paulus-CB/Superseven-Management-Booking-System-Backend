@@ -49,6 +49,16 @@ class Booking extends Model
     }
 
     /**
+     * Get the add-ons for the booking.
+     *
+     * @return BelongsToMany
+     */
+    public function addOns(): BelongsToMany
+    {
+        return $this->belongsToMany(AddOn::class, 'availed_addon')->using(AvailedAddon::class);
+    }
+
+    /**
      * The employees that belong to the booking.
      *
      * @return BelongsToMany
