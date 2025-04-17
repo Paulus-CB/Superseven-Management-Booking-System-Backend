@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('booking_id')->index();
             $table->smallInteger('workload_status')->default(0);
 
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->cascadeOnDelete();
+            $table->foreign('booking_id')->references('id')->on('bookings')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('workloads');
+        Schema::dropIfExists('workload');
     }
 };

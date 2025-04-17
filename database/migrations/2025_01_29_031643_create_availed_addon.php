@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('availed_package', function (Blueprint $table) {
+        Schema::create('availed_addon', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('package_id')->index();
+            $table->unsignedBigInteger('booking_id')->index();
             $table->unsignedBigInteger('add_on_id')->index();
             $table->timestamps();
 
-            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
-            $table->foreign('add_on_id')->references('id')->on('add_ons')->onDelete('cascade');
+            $table->foreign('booking_id')->references('id')->on('bookings')->cascadeOnDelete();
+            $table->foreign('add_on_id')->references('id')->on('add_ons')->cascadeOnDelete();
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('availed_packages');
+        Schema::dropIfExists('availed_addon');
     }
 };
