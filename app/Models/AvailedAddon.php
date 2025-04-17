@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class AvailedPackage extends Pivot
+class AvailedAddon extends Pivot
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class AvailedPackage extends Pivot
      * @var array<int, string>
      */
     protected $fillable = [
-        'package_id',
+        'booking_id',
         'add_on_id',
     ];
 
@@ -21,7 +21,7 @@ class AvailedPackage extends Pivot
      *
      * @var string
      */
-    protected $table = 'availed_package';
+    protected $table = 'availed_addon';
 
     /**
      * Indicates if the IDs are auto-incrementing.
