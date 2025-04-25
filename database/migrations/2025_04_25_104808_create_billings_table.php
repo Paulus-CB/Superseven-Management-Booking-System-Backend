@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('billings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('booking_id')->index();
-            $table->date('payment_date');
-            $table->decimal('amount_paid', 8, 2);
-            $table->smallInteger('payment_status')->default(0);
-            $table->string('remarks', 100)->nullable();
+            $table->decimal('package_amount', 8, 2);
+            $table->decimal('add_on_amount', 8, 2);
+            $table->decimal('total_amount', 8, 2);
+            $table->smallInteger('billing_status')->default(0);
+
             $table->timestamps();
+
+            $table->foreign('booking_id')->references('id')->on('bookings')->cascadeOnDelete();
         });
     }
 
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('billings');
     }
 };
