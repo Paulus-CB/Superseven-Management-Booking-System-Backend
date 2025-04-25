@@ -13,6 +13,16 @@ class Booking extends Model
 {
     use HasFactory;
 
+    public const STATUS_PENDING = 0;
+    public const STATUS_APPROVED = 1;
+    public const STATUS_REJECTED = 2;
+
+    public const STATUS = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_APPROVED => 'Approved',
+        self::STATUS_REJECTED => 'Rejected',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,7 +32,9 @@ class Booking extends Model
         'customer_id',
         'package_id',
         'booking_date',
+        'event_name',
         'booking_address',
+        'booking_status',
         'deliverable_status',
         'completion_date',
         'discount',
