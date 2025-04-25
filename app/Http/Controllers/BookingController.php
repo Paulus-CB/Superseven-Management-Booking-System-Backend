@@ -94,4 +94,24 @@ class BookingController extends BaseController
             return $this->sendException($exception);
         }
     }
+
+    public function deleteBooking(int $bookingId)
+    {
+        $booking = Booking::find($bookingId);
+
+        if (!$booking) {
+            return $this->sendError('Booking not found.');
+        }
+
+        DB::beginTransaction();
+        try {
+            $booking->delete();
+
+            DB::commit();
+            return $this->sendResponse('Booking deleted successfully.');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return $this->sendException($exception);
+        }
+    }
 }

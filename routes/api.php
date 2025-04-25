@@ -59,5 +59,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('/bookings')->group(function () {
         Route::post('/add', [BookingController::class,'addBooking']);
         Route::post('/{id}/update', [BookingController::class,'updateBooking']);
+        Route::post('/{id}/delete', [BookingController::class,'deleteBooking']);
     });
 });
