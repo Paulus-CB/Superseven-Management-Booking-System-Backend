@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id')->index();
             $table->unsignedBigInteger('package_id')->index();
             $table->date('booking_date');
+            $table->string('event_name', 100)->nullable();
             $table->string('booking_address', 100);
             $table->smallInteger('booking_status')->default(0);
             $table->smallInteger('deliverable_status')->default(0);
