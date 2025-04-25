@@ -22,10 +22,10 @@ class Booking extends Model
         'customer_id',
         'package_id',
         'booking_date',
-        'booking_time',
         'booking_address',
         'deliverable_status',
         'completion_date',
+        'discount',
     ];
 
     /**
@@ -35,7 +35,7 @@ class Booking extends Model
      */
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -79,12 +79,12 @@ class Booking extends Model
     }
 
     /**
-     * Get the payment record associated with the booking.
+     * Get the billing record associated with the booking.
      *
      * @return HasOne
      */
-    public function payment(): HasOne
+    public function billing(): HasOne
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Billing::class);
     }
 }
