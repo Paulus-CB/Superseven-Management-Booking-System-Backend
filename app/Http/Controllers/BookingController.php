@@ -2,12 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\AddBookingRequest;
+use App\Http\Resources\BookingResource;
+use App\Models\Booking;
+use App\Services\BookingService;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class BookingController extends BaseController
 {
-    public function addBooking()
+    private BookingService $bookingService;
+
+    public function __construct(BookingService $bookingService)
     {
-        
+        $this->bookingService = $bookingService;
+    }
+
+    public function addBooking(AddBookingRequest $request)
+    {
+        $request->validated();
+
+        DB::beginTransaction();
+        try {
+
+            $discount = $this->bookingService->getDiscountPercentage($request->booking_date);
+
+            $booking = Booking::create([
+                'booking_date' => $request->booking_date,
+                'customer_id' => $request->customer_id,
+                'package_id' => $request->package_id,
+                'event_name' => $request->event_name,
+                'booking_address' => $request->booking_address,
+                'completion_date' => $request->completion_date,
+                'booking_status' => Booking::STATUS_APPROVED,
+                'discount' => $discount,
+            ]);
+
+            $addOnIds = $request->input('addon_id', []);
+
+            if (!empty($addOnIds)) {
+                $booking->addons()->attach($addOnIds);
+
+                $this->bookingService->createBillingStatement($booking->id, $request->package_id, $addOnIds, $discount);
+            }
+
+            DB::commit();
+            return $this->sendResponse('Booking created successfully.', new BookingResource($booking));
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return $this->sendException($exception);
+        }
     }
 }

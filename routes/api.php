@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddonController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\User\Customer\CustomerAccountController;
 use App\Http\Controllers\User\Employee\EmployeeAccountController;
@@ -15,13 +16,14 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    // User
     Route::prefix('/users')->group(function () {
         //Authenticated
         Route::get('/current', [AuthController::class, 'user']);
         Route::post('/update', [UserController::class, 'updateCurrent']);
         Route::post('/update-password', [UserController::class, 'updatePassword']);
     });
+
+    //Admin/Staff Routes
 
     //Employees
     Route::prefix('/employees')->group(function () {
@@ -51,5 +53,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/add', [AddonController::class, 'addAddon']);
         Route::post('/{id}', [AddonController::class, 'updateAddon']);
         Route::post('/{id}/delete', [AddonController::class, 'deleteAddon']);
+    });
+
+    //Bookings
+    Route::prefix('/bookings')->group(function () {
+        Route::post('/add', [BookingController::class,'addBooking']);
     });
 });
