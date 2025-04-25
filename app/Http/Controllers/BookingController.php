@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddBookingRequest;
+use App\Http\Requests\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use App\Services\BookingService;
@@ -48,6 +49,46 @@ class BookingController extends BaseController
 
             DB::commit();
             return $this->sendResponse('Booking created successfully.', new BookingResource($booking));
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return $this->sendException($exception);
+        }
+    }
+
+    public function updateBooking(int $bookingId, UpdateBookingRequest $request)
+    {
+        $request->validated();
+
+        $booking = Booking::find($bookingId);
+
+        if (!$booking) {
+            return $this->sendError('Booking not found.');
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $booking->booking_date = $request->booking_date;
+            $booking->event_name = $request->event_name;
+            $booking->booking_address = $request->booking_address;
+
+            $addOnIds = $request->input('addon_id', []);
+
+            $packageChanged = $booking->package_id != $request->package_id;
+            $addOnsChanged = array_diff($booking->addons->pluck('id')->toArray(), $addOnIds)
+                        || array_diff($addOnIds, $booking->addons->pluck('id')->toArray());
+
+            if ($packageChanged || $addOnsChanged) {
+                $booking->addons()->sync($addOnIds);
+
+                $this->bookingService->updateBillingStatement($booking->id, $request->package_id, $addOnIds, $booking->discount);
+                $booking->package_id = $request->package_id;
+            }
+
+            $booking->save();
+
+            DB::commit();
+            return $this->sendResponse('Booking updated successfully.', new BookingResource($booking));
         } catch (Exception $exception) {
             DB::rollBack();
             return $this->sendException($exception);

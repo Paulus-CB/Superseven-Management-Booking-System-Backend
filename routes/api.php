@@ -58,5 +58,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Bookings
     Route::prefix('/bookings')->group(function () {
         Route::post('/add', [BookingController::class,'addBooking']);
+        Route::post('/{id}/update', [BookingController::class,'updateBooking']);
     });
 });
