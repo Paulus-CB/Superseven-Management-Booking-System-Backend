@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddonController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DateController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\User\Customer\CustomerAccountController;
 use App\Http\Controllers\User\Employee\EmployeeAccountController;
@@ -53,6 +54,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/add', [AddonController::class, 'addAddon']);
         Route::post('/{id}', [AddonController::class, 'updateAddon']);
         Route::post('/{id}/delete', [AddonController::class, 'deleteAddon']);
+    });
+
+    //Unavailable Dates
+    Route::prefix('/unavailable-dates')->group(function () {
+        Route::get('', [DateController::class,'getUnavailableDate']);
+        Route::post('/mark', [DateController::class,'markUnavailableDate']);
+        Route::post('/{id}/unmark', [DateController::class,'unmarkUnavailableDate']);
     });
 
     //Bookings
