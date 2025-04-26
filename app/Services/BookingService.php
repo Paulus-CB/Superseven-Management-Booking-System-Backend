@@ -4,11 +4,26 @@ namespace App\Services;
 
 use App\Models\AddOn;
 use App\Models\Billing;
+use App\Models\Booking;
 use App\Models\Package;
 use Carbon\Carbon;
 
 class BookingService
 {
+    public function getFilterBookingData()
+    {
+        return [
+            'booked' => [
+                'type' => 'or',
+                'condition' => "booking_status = " . Booking::STATUS_APPROVED,
+            ],
+            'pending' => [
+                'type'=> 'or',
+                'condition' => "booking_status = " . Booking::STATUS_PENDING,
+            ]
+        ];
+    }
+
     public function createBillingStatement(int $bookingId, int $packageId, array $addonIds, ?float $discount = null)
     {
         $package = Package::findOrFail($packageId);
@@ -56,5 +71,26 @@ class BookingService
         }
 
         return 0;
+    }
+
+    public function getUpcomingEvents()
+    {
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        return Booking::with('package')
+            ->whereBetween('booking_date', [$startOfWeek, $endOfWeek])
+            ->where('booking_status', Booking::STATUS_APPROVED)
+            ->orderBy('booking_date')
+            ->get()
+            ->map(function ($booking)
+            {
+                return [
+                    'event_name' => $booking->event_name,
+                    'booking_date' => Carbon::parse($booking->booking_date)->format('F d, Y'),
+                    'package' => $booking->package->package_name ?? '',
+                    'booking_address' => $booking->booking_address
+                ];
+            });
     }
 }
