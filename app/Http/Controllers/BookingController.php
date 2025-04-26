@@ -27,7 +27,7 @@ class BookingController extends BaseController
         $month = $request->month ?? now()->month;
         $year = $request->year ?? now()->year;
 
-        $bookings = Booking::with(['customer', 'package', 'addOns'])
+        $bookings = Booking::with('customer', 'package', 'addOns')
             ->when(isset($request->filters), function ($query) use ($request) {
                 $query->where(function ($subquery) use ($request) {
                     $this->filterCallback($subquery, $request, $this->bookingService->getFilterBookingData());
