@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddBookingRequest;
+use App\Http\Requests\Booking\PaginateRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
+use App\Http\Resources\Collections\BookingCollection;
 use App\Models\Booking;
 use App\Services\BookingService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -17,6 +20,25 @@ class BookingController extends BaseController
     public function __construct(BookingService $bookingService)
     {
         $this->bookingService = $bookingService;
+    }
+
+    public function getBookings(PaginateRequest $request)
+    {
+        $month = $request->month ?? now()->month;
+        $year = $request->year ?? now()->year;
+
+        $bookings = Booking::with(['customer', 'package', 'addOns'])
+            ->when(isset($request->filters), function ($query) use ($request) {
+                $query->where(function ($subquery) use ($request) {
+                    $this->filterCallback($subquery, $request, $this->bookingService->getFilterBookingData());
+                });
+            })
+            ->whereMonth('booking_date', $month)
+            ->whereYear('booking_date', $year)
+            ->orderBy('booking_date')
+            ->get();
+
+            return $this->sendResponse('Bookings retrieved successfully.', new BookingCollection($bookings));
     }
 
     public function addBooking(AddBookingRequest $request)
@@ -76,7 +98,7 @@ class BookingController extends BaseController
 
             $packageChanged = $booking->package_id != $request->package_id;
             $addOnsChanged = array_diff($booking->addons->pluck('id')->toArray(), $addOnIds)
-                        || array_diff($addOnIds, $booking->addons->pluck('id')->toArray());
+                || array_diff($addOnIds, $booking->addons->pluck('id')->toArray());
 
             if ($packageChanged || $addOnsChanged) {
                 $booking->addons()->sync($addOnIds);
