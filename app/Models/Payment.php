@@ -16,7 +16,7 @@ class Payment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'booking_id',
+        'billing_id',
         'payment_date',
         'amount_paid',
         'payment_status',
@@ -24,12 +24,12 @@ class Payment extends Model
     ];
 
     /**
-     * Get the booking that owns the payment.
+     * Get the billing that owns the payment.
      *
      * @return BelongsTo
      */
-    public function booking(): BelongsTo
+    public function billing(): BelongsTo
     {
-        return $this->belongsTo(Booking::class);
+        return $this->belongsTo(Billing::class);
     }
 }

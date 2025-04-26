@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AddAddonRequest extends FormRequest
+class UpdateBookingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,29 +24,22 @@ class AddAddonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'add_on_name' => 'required|string|max:30',
-            'add_on_details' => 'required|string|max:150',
-            'add_on_price' => 'required|numeric|min:0|max:999999.99',
+            'booking_date' => 'nullable|date',
+            'event_name' => 'nullable|string|max:100',
+            'booking_address' => 'nullable|string|max:100',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'add_on_name.required' => 'Add-on name is required.',
-            'add_on_name.string' => 'Add-on name must be a string.',
-            'add_on_name.max' => 'Add-on name must not exceed 30 characters.',
-            'add_on_details.required' => 'Add-on details are required.',
-            'add_on_details.string' => 'Add-on details must be a string.',
-            'add_on_details.max' => 'Add-on details must not exceed 150 characters.',
-            'add_on_price.required' => 'Add-on price is required.',
-            'add_on_price.numeric' => 'Add-on price must be a number.',
-            'add_on_price.min' => 'Add-on price must be at least 0.',
-            'add_on_price.max' => 'Add-on price must not exceed 999999.99.',
+            'booking_date.date' => 'The booking date must be a valid date.',
+            'event_name.max' => 'The event name must not exceed 100 characters.',
+            'booking_address.max' => 'The booking address must not exceed 100 characters.',
         ];
     }
 
-    /**
+        /**
      * Handle a failed validation attempt.
      *
      * @param Validator $validator
