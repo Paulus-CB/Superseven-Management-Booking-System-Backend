@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddonController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DateController;
 use App\Http\Controllers\PackageController;
@@ -69,5 +70,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/add', [BookingController::class,'addBooking']);
         Route::post('/{id}/update', [BookingController::class,'updateBooking']);
         Route::post('/{id}/delete', [BookingController::class,'deleteBooking']);
+    });
+
+    //Billings
+    Route::prefix('/billings')->group(function () {
+        Route::get('/', [BillingController::class,'getBillings']);
+        Route::get('/{id}', [BillingController::class,'viewBilling'])->name('billing.view');
+        Route::post('/{id}/add-payment', [BillingController::class,'addPayment']);
     });
 });
