@@ -1064,6 +1064,103 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Billings",
+			"item": [
+				{
+					"name": "Get Billings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/billings/?search[value]&start_year=2025&end_year=2026",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"billings",
+								""
+							],
+							"query": [
+								{
+									"key": "search[value]",
+									"value": null
+								},
+								{
+									"key": "start_year",
+									"value": "2025"
+								},
+								{
+									"key": "end_year",
+									"value": "2026"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "amount",
+									"value": "1250",
+									"type": "text"
+								},
+								{
+									"key": "payment_method",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "remarks",
+									"value": "downpayment",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/api/billings/18/add-payment",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"billings",
+								"18",
+								"add-payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Billing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/billings/18",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"billings",
+								"18"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {

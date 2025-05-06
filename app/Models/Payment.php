@@ -10,6 +10,14 @@ class Payment extends Model
 {
     use HasFactory;
 
+    public const CASH_METHOD = 0;
+    public const ONLINE_METHOD = 1;
+
+    public const PAYMENT_METHODS = [
+        self::CASH_METHOD => 'Cash Payment',
+        self::ONLINE_METHOD => 'Online Payment',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,7 +27,8 @@ class Payment extends Model
         'billing_id',
         'payment_date',
         'amount_paid',
-        'payment_status',
+        'payment_method',
+        'balance',
         'remarks',
     ];
 

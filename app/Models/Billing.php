@@ -11,6 +11,16 @@ class Billing extends Model
 {
     use HasFactory;
 
+    public const STATUS_UNPAID = 0;
+    public const STATUS_PARTIAL = 1;
+    public const STATUS_PAID = 2;
+
+    public const STATUS = [
+        self::STATUS_UNPAID => 'Unpaid',
+        self::STATUS_PARTIAL => 'Partial',
+        self::STATUS_PAID => 'Paid',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,5 +52,10 @@ class Billing extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function latestPayment()
+    {
+        return $this->hasOne(Payment::class)->latestOfMany('created_at');
     }
 }
