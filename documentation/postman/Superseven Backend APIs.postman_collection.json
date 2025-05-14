@@ -1074,7 +1074,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/billings/?search[value]&start_year=2025&end_year=2026",
+							"raw": "{{url}}/api/billings/?search[value]=&start_year=2025&end_year=2026",
 							"host": [
 								"{{url}}"
 							],
@@ -1086,7 +1086,7 @@
 							"query": [
 								{
 									"key": "search[value]",
-									"value": null
+									"value": ""
 								},
 								{
 									"key": "start_year",
@@ -1159,6 +1159,121 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workload",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Assign Workload",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "completion_date",
+											"value": "2025-07-15",
+											"type": "text"
+										},
+										{
+											"key": "deliverable_status",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "link",
+											"value": "https://drive.google.com/drive/folders/1KmG7nYn_FpSFYQYcybLGq75cV34xMBVJ?usp=drive_link",
+											"type": "text"
+										},
+										{
+											"key": "user_id[0]",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "user_id[1]",
+											"value": "4",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/workload/2/assign",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"workload",
+										"2",
+										"assign"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Workloads",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{url}}/api/workload?search[value]=&filters[deliverable_status]=false",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"workload"
+									],
+									"query": [
+										{
+											"key": "search[value]",
+											"value": ""
+										},
+										{
+											"key": "filters[deliverable_status]",
+											"value": "false",
+											"description": "0 => Unassigned\n1 => Scheduled\n2 => Active\n3 => Editing\n4 => For Release\n5 => Completed"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Workload",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/workload/2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"workload",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
