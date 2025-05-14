@@ -38,6 +38,7 @@ class Booking extends Model
         'deliverable_status',
         'completion_date',
         'discount',
+        'link',
     ];
 
     /**
@@ -77,7 +78,7 @@ class Booking extends Model
      */
     public function employees(): BelongsToMany
     {
-        return $this->belongsToMany(Employee::class, 'workload')->using(Workload::class);
+        return $this->belongsToMany(User::class, 'workload')->using(Workload::class);
     }
 
     /**
