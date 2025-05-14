@@ -106,7 +106,7 @@ class EmployeeAccountController extends BaseController
                 'type' => 'relationship',
                 'model' => 'employee',
                 'callback' => function ($subquery) use ($filters) {
-                    $subquery->where('employee_type', $filters['employee_type'] ?? null);
+                    $subquery->where('employee_type', $filters['user_type'] ?? null);
                 }
             ],
         ];
