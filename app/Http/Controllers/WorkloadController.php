@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddWorkloadRequest;
+use App\Http\Requests\PaginateRequest;
+use App\Http\Resources\Collections\WorkloadCollection;
+use App\Http\Resources\WorkloadResource;
 use App\Models\Booking;
 use Exception;
 use Illuminate\Http\Request;
@@ -9,7 +13,37 @@ use Illuminate\Support\Facades\DB;
 
 class WorkloadController extends BaseController
 {
-    public function assignWorkload(int $id, Request $request)
+    public function getWorkloads(PaginateRequest $request)
+    {
+        $workloads = Booking::with('customer', 'employees')
+            ->when(isset($request->search), function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $this->searchCallback($query, $request, ['event_name', 'customer.first_name', 'customer.last_name']);
+                });
+            })->when(isset($request->filters), function ($query) use ($request) {
+                $query->where(function ($subquery) use ($request) {
+                    $this->filterCallback($subquery, $request, $this->getFilterWorkloadData($request->filters));
+                });
+            })->where('booking_status', Booking::STATUS_APPROVED)
+            ->orderBy('deliverable_status');
+
+        $paginated = $workloads->paginate(self::PER_PAGE);
+
+        return $this->sendResponse('Workloads retrieved successfully.', new WorkloadCollection($paginated));
+    }
+
+    public function viewWorkload(int $id)
+    {
+        $workload = Booking::with('customer', 'employees')->where('id', $id)->first();
+
+        if (!$workload) {
+            return $this->sendError('Workload not found.', 404);
+        }
+
+        return $this->sendResponse('Workload retrieved successfully.', new WorkloadResource($workload));
+    }
+
+    public function assignWorkload(int $id, AddWorkloadRequest $request)
     {
         $request->validated();
 
@@ -23,12 +57,33 @@ class WorkloadController extends BaseController
         try {
 
             $userIds = $request->input('user_id', []);
+            $existingUserIds = $booking->employees()->pluck('users.id')->toArray();
 
-            // $ex
+            $booking->employees()->detach(array_diff($existingUserIds, $userIds));
 
+            $booking->employees()->attach(array_diff($userIds, $existingUserIds));
+
+            $booking->completion_date = $request->completion_date;
+            $booking->deliverable_status = $request->deliverable_status;
+            $booking->link = $request->link;
+
+            $booking->save();
+
+            DB::commit();
+            return $this->sendResponse('Workload assigned successfully.', new WorkloadResource($booking));
         } catch (Exception $exception) {
             DB::rollBack();
             return $this->sendException($exception);
         }
+    }
+
+    private function getFilterWorkloadData($filter = [])
+    {
+        return [
+            'deliverable_status' => [
+                'type' => 'raw',
+                'condition' => 'deliverable_status = ' . $filter['deliverable_status'],
+            ]
+        ];
     }
 }
