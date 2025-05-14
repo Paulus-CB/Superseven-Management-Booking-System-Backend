@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('workload', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('booking_id')->index();
             $table->smallInteger('workload_status')->default(0);
 
-            $table->foreign('employee_id')->references('id')->on('employees')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('booking_id')->references('id')->on('bookings')->cascadeOnDelete();
             $table->timestamps();
         });

@@ -20,7 +20,7 @@ class QueryHelper
 
         if (is_string($searches)) {
             foreach ($targets as $target) {
-                if (!str_contains($target, ',')) {
+                if (!str_contains($target, '.')) {
                     $query->orWhere(str_replace('-', '.', $target), 'LIKE', '%' . $searches . '%');
                     continue;
                 }
@@ -31,7 +31,7 @@ class QueryHelper
                 if (count($relationship) === self::WITH_PIVOT) {
                     $pivotColumn = $relationship[self::WITH_PIVOT - 1];
                     $query->orWhereHas($model, function ($subquery) use ($column, $searches, $pivotColumn) {
-                        $subquery->where($column, function ($pivotQuery) use ($pivotColumn, $searches) {
+                        $subquery->whereHas($column, function ($pivotQuery) use ($pivotColumn, $searches) {
                             $pivotQuery->where($pivotColumn, 'LIKE', '%' . $searches . '%');
                         });
                     });
@@ -46,7 +46,9 @@ class QueryHelper
         }
 
         foreach ($searches as $search) {
-            $sources = str_contains($search['key'], ',') ? explode(',', $search['key']) : [$search['key']];
+            $sources = str_contains($search['key'], ',')
+                ? explode(',', $search['key'])
+                : [$search['key']];
 
             $query->where(function ($subquery) use ($search, $sources, $targets) {
                 foreach ($targets as $target) {

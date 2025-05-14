@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -16,11 +17,26 @@ class Booking extends Model
     public const STATUS_PENDING = 0;
     public const STATUS_APPROVED = 1;
     public const STATUS_REJECTED = 2;
+    public const STATUS_UNASSIGNED = 0;
+    public const STATUS_SCHEDULED = 1;
+    public const STATUS_ACTIVE = 2;
+    public const STATUS_EDITING = 3;
+    public const STATUS_FOR_RELEASE = 4;
+    public const STATUS_COMPLETED = 5;
 
     public const STATUS = [
         self::STATUS_PENDING => 'Pending',
         self::STATUS_APPROVED => 'Approved',
         self::STATUS_REJECTED => 'Rejected',
+    ];
+
+    public const DELIVERABLE_STATUS = [
+        self::STATUS_UNASSIGNED => 'Unassigned',
+        self::STATUS_SCHEDULED => 'Scheduled',
+        self::STATUS_ACTIVE => 'Active',
+        self::STATUS_EDITING => 'Editing',
+        self::STATUS_FOR_RELEASE => 'For Release',
+        self::STATUS_COMPLETED => 'Completed',
     ];
 
     /**
@@ -38,6 +54,7 @@ class Booking extends Model
         'deliverable_status',
         'completion_date',
         'discount',
+        'link',
     ];
 
     /**
@@ -77,7 +94,7 @@ class Booking extends Model
      */
     public function employees(): BelongsToMany
     {
-        return $this->belongsToMany(Employee::class, 'workload')->using(Workload::class);
+        return $this->belongsToMany(User::class, 'workload')->using(Workload::class);
     }
 
     /**

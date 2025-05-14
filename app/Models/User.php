@@ -107,6 +107,16 @@ class User extends Authenticatable
     }
 
     /**
+     * The bookings that belong to the user.
+     *
+     * @return BelongsToMany
+     */
+    public function workloads(): BelongsToMany
+    {
+        return $this->belongsToMany(Booking::class, 'workload')->using(Workload::class);
+    }
+
+    /**
      * Get the feedbacks for the Customer user.
      *
      * @return HasMany

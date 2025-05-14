@@ -9,6 +9,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\User\Customer\CustomerAccountController;
 use App\Http\Controllers\User\Employee\EmployeeAccountController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\WorkloadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -77,5 +78,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [BillingController::class,'getBillings']);
         Route::get('/{id}', [BillingController::class,'viewBilling'])->name('billing.view');
         Route::post('/{id}/add-payment', [BillingController::class,'addPayment']);
+    });
+
+    //Workload
+    Route::prefix('/workload')->group(function () {
+        Route::get('/', [WorkloadController::class,'getWorkloads']);
+        Route::get('/{id}', [WorkloadController::class,'viewWorkload']);
+        Route::post('/{id}/assign', [WorkloadController::class,'assignWorkload']);
     });
 });

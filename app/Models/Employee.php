@@ -28,14 +28,4 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * The bookings that belong to the employee.
-     *
-     * @return BelongsToMany
-     */
-    public function workloads(): BelongsToMany
-    {
-        return $this->belongsToMany(Booking::class, 'workload')->using(Workload::class);
-    }
 }
