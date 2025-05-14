@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('booking_id')->index();
-            $table->unsignedBigInteger('customer_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
             $table->date('feedback_date');
             $table->string('feedback_details', 250);
+            $table->smallInteger('feedback_status')->default(0);
             $table->timestamps();
 
             $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
