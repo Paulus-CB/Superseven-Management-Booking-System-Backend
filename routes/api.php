@@ -84,6 +84,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('/workload')->group(function () {
         Route::get('/', [WorkloadController::class,'getWorkloads']);
         Route::get('/{id}', [WorkloadController::class,'viewWorkload']);
+        Route::get('/{id}/employees', [WorkloadController::class,'getAvailableEmployee']);
         Route::post('/{id}/assign', [WorkloadController::class,'assignWorkload']);
     });
 });
