@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddWorkloadRequest;
 use App\Http\Requests\PaginateRequest;
 use App\Http\Resources\Collections\WorkloadCollection;
+use App\Http\Resources\AddEmployeeWorkloadResource;
 use App\Http\Resources\WorkloadResource;
 use App\Models\Booking;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -75,6 +77,20 @@ class WorkloadController extends BaseController
             DB::rollBack();
             return $this->sendException($exception);
         }
+    }
+
+    public function getAvailableEmployee(int $id)
+    {
+        $employee = User::with('employee')
+            ->whereHas('employee', function ($query) {
+                $query->whereIn('employee_type', [
+                    User::PHOTOGRAPHER_TYPE,
+                    User::EDITOR_TYPE
+                ]);
+            })
+            ->get();
+
+        return $this->sendResponse('Available employees retrieved successfully.', AddEmployeeWorkloadResource::collection($employee));
     }
 
     private function getFilterWorkloadData($filter = [])
