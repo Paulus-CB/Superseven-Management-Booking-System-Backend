@@ -311,7 +311,7 @@
 							"formdata": [
 								{
 									"key": "first_name",
-									"value": "Lonie Jay",
+									"value": "Marus",
 									"type": "text"
 								},
 								{
@@ -321,12 +321,12 @@
 								},
 								{
 									"key": "last_name",
-									"value": "Dalaygon",
+									"value": "Damgo",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "lonie@gmail.com",
+									"value": "marcus@gmail.com",
 									"type": "text"
 								},
 								{
@@ -354,6 +354,7 @@
 								{
 									"key": "user_type",
 									"value": "4",
+									"description": "4 = Secretary\n5 = Photographer\n6 = Editor\n7 = Freelancer",
 									"type": "text"
 								}
 							]
@@ -1193,13 +1194,14 @@
 										},
 										{
 											"key": "user_id[0]",
-											"value": "3",
+											"value": "6",
 											"type": "text"
 										},
 										{
 											"key": "user_id[1]",
 											"value": "4",
-											"type": "text"
+											"type": "text",
+											"disabled": true
 										}
 									]
 								},
@@ -1260,14 +1262,48 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/api/workload/2",
+									"raw": "{{url}}/api/workload/1",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
 										"workload",
-										"2"
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List of Employees",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{url}}/api/workload/1/employees",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"workload",
+										"1",
+										"employees"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
 									]
 								}
 							},
