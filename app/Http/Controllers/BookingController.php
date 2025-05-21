@@ -41,7 +41,7 @@ class BookingController extends BaseController
             ->orderBy('booking_date')
             ->get();
 
-            return $this->sendResponse('Bookings retrieved successfully.', new BookingCollection($bookings));
+        return $this->sendResponse('Bookings retrieved successfully.', new BookingCollection($bookings));
     }
 
     public function addBooking(AddBookingRequest $request)
@@ -51,11 +51,16 @@ class BookingController extends BaseController
         DB::beginTransaction();
         try {
 
+            //create walk in customer account
+            $customer = $this->bookingService->createWalkinCustomer($request->first_name, $request->last_name, $request->address, $request->email, $request->contact_no);
+
+            // calculate discount
             $discount = $this->bookingService->getDiscountPercentage($request->booking_date);
 
+            // create booking
             $booking = Booking::create([
                 'booking_date' => $request->booking_date,
-                'customer_id' => $request->customer_id,
+                'customer_id' => $customer->id,
                 'package_id' => $request->package_id,
                 'event_name' => $request->event_name,
                 'booking_address' => $request->booking_address,
@@ -64,13 +69,16 @@ class BookingController extends BaseController
                 'discount' => $discount,
             ]);
 
-            $addOnIds = $request->input('addon_id', []);
+            $addOnIds = (array) $request->input('addon_id', []);
 
-            if (!empty($addOnIds)) {
-                $booking->addons()->attach($addOnIds);
+            $booking->addons()->sync($addOnIds);
 
-                $this->bookingService->createBillingStatement($booking->id, $request->package_id, $addOnIds, $discount);
-            }
+            $this->bookingService->createBillingStatement(
+                $booking->id,
+                $request->package_id,
+                $addOnIds,
+                $discount
+            );
 
             DB::commit();
             return $this->sendResponse('Booking created successfully.', new BookingResource($booking));
@@ -83,35 +91,46 @@ class BookingController extends BaseController
     public function updateBooking(int $bookingId, UpdateBookingRequest $request)
     {
         $request->validated();
-
-        $booking = Booking::find($bookingId);
-
-        if (!$booking) {
-            return $this->sendError('Booking not found.');
-        }
+        $booking = Booking::findOrFail($bookingId);
 
         DB::beginTransaction();
         try {
+            // Update basic fields
+            $booking->fill([
+                'booking_date' => $request->booking_date,
+                'event_name' => $request->event_name,
+                'booking_address' => $request->booking_address,
+            ]);
 
-            $booking->booking_date = $request->booking_date;
-            $booking->event_name = $request->event_name;
-            $booking->booking_address = $request->booking_address;
+            // Check for discount changes
+            $shouldUpdateBilling = false;
+            if ($booking->isDirty('booking_date')) {
+                $booking->discount = $this->bookingService
+                    ->getDiscountPercentage($request->booking_date);
+                $shouldUpdateBilling = true;
+            }
 
-            $addOnIds = $request->input('addon_id', []);
+            // Check for package/add-on changes
+            $addOnIds = (array) $request->input('addon_id', []);
+            $currentAddOns = $booking->addons()->pluck('add_on_id')->toArray();
 
             $packageChanged = $booking->package_id != $request->package_id;
-            $addOnsChanged = array_diff($booking->addons->pluck('id')->toArray(), $addOnIds)
-                || array_diff($addOnIds, $booking->addons->pluck('id')->toArray());
+            $addOnsChanged = count(array_diff($currentAddOns, $addOnIds)) > 0
+                || count(array_diff($addOnIds, $currentAddOns)) > 0;
 
-            if ($packageChanged || $addOnsChanged) {
+            if ($packageChanged || $addOnsChanged || $shouldUpdateBilling) {
+                $booking->package_id = $request->package_id;;
                 $booking->addons()->sync($addOnIds);
 
-                $this->bookingService->updateBillingStatement($booking->id, $request->package_id, $addOnIds, $booking->discount);
-                $booking->package_id = $request->package_id;
+                $this->bookingService->updateBillingStatement(
+                    $booking->id,
+                    $request->package_id,
+                    $addOnIds,
+                    $booking->discount
+                );
             }
 
             $booking->save();
-
             DB::commit();
             return $this->sendResponse('Booking updated successfully.', new BookingResource($booking));
         } catch (Exception $exception) {
@@ -142,7 +161,7 @@ class BookingController extends BaseController
 
     public function getAvailablePackages()
     {
-        $packages = Package::all('id','package_name');
+        $packages = Package::all('id', 'package_name');
 
         return $this->sendResponse('Packages retrieved successfully.', $packages);
     }

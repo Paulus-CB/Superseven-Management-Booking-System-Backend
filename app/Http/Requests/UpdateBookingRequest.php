@@ -24,7 +24,7 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'booking_date' => 'nullable|date',
+            'booking_date' => 'nullable|date|after_or_equal:+30 days',
             'event_name' => 'nullable|string|max:100',
             'booking_address' => 'nullable|string|max:100',
         ];
@@ -34,6 +34,7 @@ class UpdateBookingRequest extends FormRequest
     {
         return [
             'booking_date.date' => 'The booking date must be a valid date.',
+            'booking_date.after_or_equal'=> 'The booking date must be at least 30 days from today.',
             'event_name.max' => 'The event name must not exceed 100 characters.',
             'booking_address.max' => 'The booking address must not exceed 100 characters.',
         ];
