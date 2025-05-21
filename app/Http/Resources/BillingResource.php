@@ -24,7 +24,7 @@ class BillingResource extends JsonResource
             'add_ons' => AddonResource::collection($this->addOns),
             'package_amount' => $this->billing->package_amount,
             'add_on_amount' => $this->billing->add_on_amount,
-            'discount' => $this->billing->discount ?? 0,
+            'discount' => $this->discount ?? 0,
             'total_amount' => $this->billing->total_amount,
             'balance' => $this->billing?->latestPayment->balance ?? $this->billing->total_amount,
             'status' => Billing::STATUS[$this->billing->billing_status],

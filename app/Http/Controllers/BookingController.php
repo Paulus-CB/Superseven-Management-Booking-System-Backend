@@ -6,8 +6,11 @@ use App\Http\Requests\AddBookingRequest;
 use App\Http\Requests\Booking\PaginateRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
+use App\Http\Resources\BookingAddOnsResource;
 use App\Http\Resources\Collections\BookingCollection;
 use App\Models\Booking;
+use \App\Models\Package;
+use \App\Models\AddOn;
 use App\Services\BookingService;
 use Carbon\Carbon;
 use Exception;
@@ -135,5 +138,19 @@ class BookingController extends BaseController
             DB::rollBack();
             return $this->sendException($exception);
         }
+    }
+
+    public function getAvailablePackages()
+    {
+        $packages = Package::all('id','package_name');
+
+        return $this->sendResponse('Packages retrieved successfully.', $packages);
+    }
+
+    public function getAvailableAddons(int $id)
+    {
+        $addons = Addon::all();
+
+        return $this->sendResponse('Addons retrieved successfully.', BookingAddOnsResource::collection($addons));
     }
 }
