@@ -75,8 +75,8 @@ class BookingService
 
     public function getUpcomingEvents()
     {
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
+        $startOfWeek = Carbon::today();
+        $endOfWeek = Carbon::today()->addDays(6)->endOfDay();
 
         return Booking::with('package')
             ->whereBetween('booking_date', [$startOfWeek, $endOfWeek])
