@@ -23,7 +23,11 @@ class BookingService
             'pending' => [
                 'type' => 'or',
                 'condition' => "booking_status = " . Booking::STATUS_PENDING,
-            ]
+            ],
+            'for_resched' => [
+                'type'=> 'or',
+                'condition'=> ''. Booking::STATUS_FOR_RESCHEDULE,
+            ],
         ];
     }
 
