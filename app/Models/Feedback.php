@@ -10,6 +10,18 @@ class Feedback extends Model
 {
     use HasFactory;
 
+    public const STATUS_PENDING = 0;
+    public const STATUS_UNPOSTED = 1;
+    public const STATUS_POSTED = 3;
+
+    public const STATUSES = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_UNPOSTED => 'Unposted',
+        self::STATUS_POSTED => 'Posted',
+    ];
+
+    protected $table = 'feedbacks';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -37,8 +49,8 @@ class Feedback extends Model
      *
      * @return BelongsTo
      */
-    public function customer(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(User::class);
     }
 }
