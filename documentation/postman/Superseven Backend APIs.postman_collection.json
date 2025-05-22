@@ -1207,7 +1207,7 @@
 							"formdata": [
 								{
 									"key": "amount",
-									"value": "1000",
+									"value": "2400",
 									"type": "text"
 								},
 								{
@@ -1217,20 +1217,20 @@
 								},
 								{
 									"key": "remarks",
-									"value": "Full payment",
+									"value": "down payment",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{url}}/api/billings/7/add-payment",
+							"raw": "{{url}}/api/billings/1/add-payment",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"billings",
-								"7",
+								"1",
 								"add-payment"
 							]
 						}
@@ -1399,6 +1399,111 @@
 											"value": null,
 											"disabled": true
 										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Feedback",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "fetch feedbacks",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/feedbacks?search[value]=&filters[posted]=false&filters[unposted]=false&filters[pending]=false",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"feedbacks"
+									],
+									"query": [
+										{
+											"key": "search[value]",
+											"value": ""
+										},
+										{
+											"key": "filters[posted]",
+											"value": "false"
+										},
+										{
+											"key": "filters[unposted]",
+											"value": "false"
+										},
+										{
+											"key": "filters[pending]",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Feedback",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/feedbacks/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"feedbacks",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mark Feedback as posted",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/feedbacks/1/mark-as-posted",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"feedbacks",
+										"1",
+										"mark-as-posted"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mark feedback as unposted",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/feedbacks/1/mark-as-unposted",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"feedbacks",
+										"1",
+										"mark-as-unposted"
 									]
 								}
 							},
