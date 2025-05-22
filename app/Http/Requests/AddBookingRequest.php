@@ -24,8 +24,15 @@ class AddBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'booking_date' => 'required|date|after_or_equal:today',
-            'customer_id' => 'required|integer',
+            'first_name' => 'required|string|max:30',
+            'last_name' => 'required|string|max:30',
+            'address' => 'required|string|max:100',
+            'email' => 'required|email|unique:users,email',
+            'contact_no' => ['required','regex:/^(09\d{9}|\\+639\d{9})$/'],
+            'booking_date' => [
+                'required',
+                'after_or_equal:' . today()->addDays(30)->toDateString()
+            ],
             'package_id' => 'required|integer',
             'event_name' => 'required|string|max:100',
             'booking_address' => 'required|string|max:100',
@@ -37,9 +44,21 @@ class AddBookingRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'first_name.required' => 'The first name is required.',
+            'first_name.string' => 'The first name must be a string.',
+            'first_name.max'=> 'The first name must not exceed 30 characters.',
+            'last_name.required' => 'The last name is required.',
+            'last_name.string' => 'The last name must be a string.',
+            'last_name.max' => 'The last name must not exceed 30 characters.',
+            'address.required' => 'The address is required.',
+            'address.max'=> 'address must not exceed 100 characters.',
+            'email.required' => 'The email is required.',
+            'email.email' => 'The email must be a valid email address.',
+            'email.unique' => 'The email is already taken.',
+            'contact_no.required'=> 'The contact number is required.',
+            'contact_no.regex' => 'The contact number must be a valid Philippine number (e.g., 09171234567).',
             'booking_date.required' => 'The booking date is required.',
-            'booking_date.after_or_equal'=> 'The booking date must be after or equal to today.',
-            'customer_id.required' => 'The customer ID is required.',
+            'booking_date.after_or_equal'=> 'The booking date must be at least 30 days from today.',
             'package_id.required' => 'The package ID is required.',
             'event_name.required' => 'The event name is required.',
             'event_name.max' => 'The event name must not exceed 100 characters.',

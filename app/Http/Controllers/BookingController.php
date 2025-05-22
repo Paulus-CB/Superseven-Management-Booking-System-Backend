@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddBookingRequest;
 use App\Http\Requests\Booking\PaginateRequest;
+use App\Http\Requests\ReschedBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Http\Resources\BookingAddOnsResource;
@@ -14,6 +15,7 @@ use \App\Models\AddOn;
 use App\Services\BookingService;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class BookingController extends BaseController
@@ -39,9 +41,10 @@ class BookingController extends BaseController
             ->whereMonth('booking_date', $month)
             ->whereYear('booking_date', $year)
             ->orderBy('booking_date')
+            ->orderBy('created_at')
             ->get();
 
-            return $this->sendResponse('Bookings retrieved successfully.', new BookingCollection($bookings));
+        return $this->sendResponse('Bookings retrieved successfully.', new BookingCollection($bookings));
     }
 
     public function addBooking(AddBookingRequest $request)
@@ -51,26 +54,34 @@ class BookingController extends BaseController
         DB::beginTransaction();
         try {
 
+            //create walk in customer account
+            $customer = $this->bookingService->createWalkinCustomer($request->first_name, $request->last_name, $request->address, $request->email, $request->contact_no);
+
+            // calculate discount
             $discount = $this->bookingService->getDiscountPercentage($request->booking_date);
 
+            // create booking
             $booking = Booking::create([
                 'booking_date' => $request->booking_date,
-                'customer_id' => $request->customer_id,
+                'customer_id' => $customer->id,
                 'package_id' => $request->package_id,
                 'event_name' => $request->event_name,
                 'booking_address' => $request->booking_address,
                 'completion_date' => $request->completion_date,
-                'booking_status' => Booking::STATUS_APPROVED,
+                'booking_status' => Booking::STATUS_PENDING,
                 'discount' => $discount,
             ]);
 
-            $addOnIds = $request->input('addon_id', []);
+            $addOnIds = (array) $request->input('addon_id', []);
 
-            if (!empty($addOnIds)) {
-                $booking->addons()->attach($addOnIds);
+            $booking->addons()->sync($addOnIds);
 
-                $this->bookingService->createBillingStatement($booking->id, $request->package_id, $addOnIds, $discount);
-            }
+            $this->bookingService->createBillingStatement(
+                $booking->id,
+                $request->package_id,
+                $addOnIds,
+                $discount
+            );
 
             DB::commit();
             return $this->sendResponse('Booking created successfully.', new BookingResource($booking));
@@ -83,35 +94,46 @@ class BookingController extends BaseController
     public function updateBooking(int $bookingId, UpdateBookingRequest $request)
     {
         $request->validated();
-
-        $booking = Booking::find($bookingId);
-
-        if (!$booking) {
-            return $this->sendError('Booking not found.');
-        }
+        $booking = Booking::findOrFail($bookingId);
 
         DB::beginTransaction();
         try {
+            // Update basic fields
+            $booking->fill([
+                'booking_date' => $request->booking_date,
+                'event_name' => $request->event_name,
+                'booking_address' => $request->booking_address,
+            ]);
 
-            $booking->booking_date = $request->booking_date;
-            $booking->event_name = $request->event_name;
-            $booking->booking_address = $request->booking_address;
+            // Check for discount changes
+            $shouldUpdateBilling = false;
+            if ($booking->isDirty('booking_date')) {
+                $booking->discount = $this->bookingService
+                    ->getDiscountPercentage($request->booking_date);
+                $shouldUpdateBilling = true;
+            }
 
-            $addOnIds = $request->input('addon_id', []);
+            // Check for package/add-on changes
+            $addOnIds = (array) $request->input('addon_id', []);
+            $currentAddOns = $booking->addons()->pluck('add_on_id')->toArray();
 
             $packageChanged = $booking->package_id != $request->package_id;
-            $addOnsChanged = array_diff($booking->addons->pluck('id')->toArray(), $addOnIds)
-                || array_diff($addOnIds, $booking->addons->pluck('id')->toArray());
+            $addOnsChanged = count(array_diff($currentAddOns, $addOnIds)) > 0
+                || count(array_diff($addOnIds, $currentAddOns)) > 0;
 
-            if ($packageChanged || $addOnsChanged) {
+            if ($packageChanged || $addOnsChanged || $shouldUpdateBilling) {
+                $booking->package_id = $request->package_id;;
                 $booking->addons()->sync($addOnIds);
 
-                $this->bookingService->updateBillingStatement($booking->id, $request->package_id, $addOnIds, $booking->discount);
-                $booking->package_id = $request->package_id;
+                $this->bookingService->updateBillingStatement(
+                    $booking->id,
+                    $request->package_id,
+                    $addOnIds,
+                    $booking->discount
+                );
             }
 
             $booking->save();
-
             DB::commit();
             return $this->sendResponse('Booking updated successfully.', new BookingResource($booking));
         } catch (Exception $exception) {
@@ -140,9 +162,35 @@ class BookingController extends BaseController
         }
     }
 
+    public function rescheduleBooking(int $bookingId, ReschedBookingRequest $request)
+    {
+        $validated = $request->validated();
+
+        $booking = Booking::where('id', $bookingId)
+            ->where('booking_status', Booking::STATUS_FOR_RESCHEDULE)->first();
+
+        if (!$booking) {
+            return $this->sendError('Booking not found.', 404);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $booking->booking_date = $validated['booking_date'];
+            $booking->booking_status = Booking::STATUS_PENDING;
+            $booking->save();
+
+            DB::commit();
+            return $this->sendResponse('Booking rescheduled successfully.', new BookingResource($booking));
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return $this->sendException($exception);
+        }
+    }
+
     public function getAvailablePackages()
     {
-        $packages = Package::all('id','package_name');
+        $packages = Package::all('id', 'package_name');
 
         return $this->sendResponse('Packages retrieved successfully.', $packages);
     }
