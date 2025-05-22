@@ -26,7 +26,7 @@ class BookingService
             ],
             'for_resched' => [
                 'type'=> 'or',
-                'condition'=> ''. Booking::STATUS_FOR_RESCHEDULE,
+                'condition'=> "booking_status = " . Booking::STATUS_FOR_RESCHEDULE,
             ],
         ];
     }
