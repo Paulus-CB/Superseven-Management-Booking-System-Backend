@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddBookingRequest;
 use App\Http\Requests\Booking\PaginateRequest;
+use App\Http\Requests\ReschedBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Http\Resources\BookingAddOnsResource;
@@ -14,6 +15,7 @@ use \App\Models\AddOn;
 use App\Services\BookingService;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class BookingController extends BaseController
@@ -39,6 +41,7 @@ class BookingController extends BaseController
             ->whereMonth('booking_date', $month)
             ->whereYear('booking_date', $year)
             ->orderBy('booking_date')
+            ->orderBy('created_at')
             ->get();
 
         return $this->sendResponse('Bookings retrieved successfully.', new BookingCollection($bookings));
@@ -65,7 +68,7 @@ class BookingController extends BaseController
                 'event_name' => $request->event_name,
                 'booking_address' => $request->booking_address,
                 'completion_date' => $request->completion_date,
-                'booking_status' => Booking::STATUS_APPROVED,
+                'booking_status' => Booking::STATUS_PENDING,
                 'discount' => $discount,
             ]);
 
@@ -153,6 +156,32 @@ class BookingController extends BaseController
 
             DB::commit();
             return $this->sendResponse('Booking deleted successfully.');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return $this->sendException($exception);
+        }
+    }
+
+    public function rescheduleBooking(int $bookingId, ReschedBookingRequest $request)
+    {
+        $validated = $request->validated();
+
+        $booking = Booking::where('id', $bookingId)
+            ->where('booking_status', Booking::STATUS_FOR_RESCHEDULE)->first();
+
+        if (!$booking) {
+            return $this->sendError('Booking not found.', 404);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $booking->booking_date = $validated['booking_date'];
+            $booking->booking_status = Booking::STATUS_PENDING;
+            $booking->save();
+
+            DB::commit();
+            return $this->sendResponse('Booking rescheduled successfully.', new BookingResource($booking));
         } catch (Exception $exception) {
             DB::rollBack();
             return $this->sendException($exception);
