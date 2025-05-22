@@ -73,6 +73,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}/addons', [BookingController::class,'getAvailableAddons']);
         Route::post('/{id}/update', [BookingController::class,'updateBooking']);
         Route::post('/{id}/delete', [BookingController::class,'deleteBooking']);
+        Route::post('/{id}/reschedule', [BookingController::class,'rescheduleBooking']);
     });
 
     //Billings
