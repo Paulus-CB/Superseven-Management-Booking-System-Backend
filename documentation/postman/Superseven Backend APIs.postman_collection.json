@@ -311,7 +311,7 @@
 							"formdata": [
 								{
 									"key": "first_name",
-									"value": "Lonie Jay",
+									"value": "Marus",
 									"type": "text"
 								},
 								{
@@ -321,12 +321,12 @@
 								},
 								{
 									"key": "last_name",
-									"value": "Dalaygon",
+									"value": "Damgo",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "lonie@gmail.com",
+									"value": "marcus@gmail.com",
 									"type": "text"
 								},
 								{
@@ -354,6 +354,7 @@
 								{
 									"key": "user_type",
 									"value": "4",
+									"description": "4 = Secretary\n5 = Photographer\n6 = Editor\n7 = Freelancer",
 									"type": "text"
 								}
 							]
@@ -805,33 +806,29 @@
 									"formdata": [
 										{
 											"key": "booking_date",
-											"value": "2025-04-28",
-											"type": "text"
-										},
-										{
-											"key": "customer_id",
-											"value": "5",
+											"value": "2025-07-10",
 											"type": "text"
 										},
 										{
 											"key": "package_id",
-											"value": "1",
+											"value": "2",
 											"type": "text"
 										},
 										{
 											"key": "event_name",
-											"value": "Hannah & Rato's Wedding",
+											"value": "Sample",
 											"type": "text"
 										},
 										{
 											"key": "booking_address",
-											"value": "Dampas Bohol",
+											"value": "Plant Namek",
 											"type": "text"
 										},
 										{
 											"key": "completion_date",
-											"value": "2025-04-30",
-											"type": "text"
+											"value": "",
+											"type": "text",
+											"disabled": true
 										},
 										{
 											"key": "addon_id[0]",
@@ -841,6 +838,31 @@
 										{
 											"key": "addon_id[1]",
 											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "first_name",
+											"value": "John",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "Paul",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "Talibon, Bohol",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "john@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "contact_no",
+											"value": "09982928192",
 											"type": "text"
 										}
 									]
@@ -869,17 +891,17 @@
 									"formdata": [
 										{
 											"key": "booking_date",
-											"value": "2025-04-29",
+											"value": "2025-06-29",
 											"type": "text"
 										},
 										{
 											"key": "package_id",
-											"value": "1",
+											"value": "3",
 											"type": "text"
 										},
 										{
 											"key": "event_name",
-											"value": "Kasal ni Lonie",
+											"value": "Lonie & Kai's Wedding",
 											"type": "text"
 										},
 										{
@@ -895,19 +917,20 @@
 										{
 											"key": "addon_id[1]",
 											"value": "3",
-											"type": "text"
+											"type": "text",
+											"disabled": true
 										}
 									]
 								},
 								"url": {
-									"raw": "{{url}}/api/bookings/7/update",
+									"raw": "{{url}}/api/bookings/6/update",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
 										"bookings",
-										"7",
+										"6",
 										"update"
 									]
 								}
@@ -924,14 +947,14 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "{{url}}/api/bookings/7/delete",
+									"raw": "{{url}}/api/bookings/2/delete",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
 										"bookings",
-										"7",
+										"2",
 										"delete"
 									]
 								}
@@ -944,7 +967,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/api/bookings?month=&year=&filters[booked]=true&filters[pending]=true",
+									"raw": "{{url}}/api/bookings?month=7&year=2025&filters[booked]=true&filters[pending]=true&filters[for_resched]=true",
 									"host": [
 										"{{url}}"
 									],
@@ -955,11 +978,11 @@
 									"query": [
 										{
 											"key": "month",
-											"value": ""
+											"value": "7"
 										},
 										{
 											"key": "year",
-											"value": ""
+											"value": "2025"
 										},
 										{
 											"key": "filters[booked]",
@@ -968,13 +991,86 @@
 										{
 											"key": "filters[pending]",
 											"value": "true"
+										},
+										{
+											"key": "filters[for_resched]",
+											"value": "true"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reschedule Booking",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "booking_date",
+											"value": "2025-06-28",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/bookings/7/reschedule",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"bookings",
+										"7",
+										"reschedule"
 									]
 								}
 							},
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Get Packages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/bookings/packages",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"bookings",
+								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Addons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/bookings/1/addons",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"bookings",
+								"1",
+								"addons"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1111,7 +1207,7 @@
 							"formdata": [
 								{
 									"key": "amount",
-									"value": "1250",
+									"value": "1000",
 									"type": "text"
 								},
 								{
@@ -1121,20 +1217,20 @@
 								},
 								{
 									"key": "remarks",
-									"value": "downpayment",
+									"value": "Full payment",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{url}}/api/billings/18/add-payment",
+							"raw": "{{url}}/api/billings/7/add-payment",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"billings",
-								"18",
+								"7",
 								"add-payment"
 							]
 						}
@@ -1147,14 +1243,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/billings/18",
+							"raw": "{{url}}/api/billings/7",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"billings",
-								"18"
+								"7"
 							]
 						}
 					},
@@ -1193,13 +1289,14 @@
 										},
 										{
 											"key": "user_id[0]",
-											"value": "3",
+											"value": "6",
 											"type": "text"
 										},
 										{
 											"key": "user_id[1]",
 											"value": "4",
-											"type": "text"
+											"type": "text",
+											"disabled": true
 										}
 									]
 								},
@@ -1260,14 +1357,48 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/api/workload/2",
+									"raw": "{{url}}/api/workload/1",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
 										"workload",
-										"2"
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List of Employees",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{url}}/api/workload/1/employees",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"workload",
+										"1",
+										"employees"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
 									]
 								}
 							},

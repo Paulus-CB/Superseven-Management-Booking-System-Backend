@@ -29,10 +29,10 @@ class BillingController extends BaseController
             })
             ->whereYear('booking_date', '>=', $startYear)
             ->whereYear('booking_date', '<=', $endYear)
+            ->where('booking_status', '!=', Booking::STATUS_FOR_RESCHEDULE)
             ->orderBy(Billing::select('billing_status')
                 ->whereColumn('booking_id', 'bookings.id')
                 ->limit(1));
-
 
         $paginated = $billings->paginate(self::PER_PAGE);
 
@@ -55,8 +55,7 @@ class BillingController extends BaseController
 
     public function addPayment(int $billingId, PaymentRequest $request)
     {
-        $request->validated();
-
+        $validated = $request->validated();
         $billing = Billing::find($billingId);
 
         if (!$billing) {
@@ -65,36 +64,60 @@ class BillingController extends BaseController
 
         DB::beginTransaction();
         try {
-
+            // Calculate payment totals
             $totalAmount = $billing->total_amount;
-            $paidAmount = $billing->payments->sum('amount_paid');
-            $currentAmount = $request->amount;
-            $newBalance = max(0, $totalAmount - ($paidAmount + $currentAmount));
+            $paidAmount = $billing->payments()->sum('amount_paid');
+            $currentPayment = $validated['amount'];
+            $newBalance = max(0, $totalAmount - ($paidAmount + $currentPayment));
 
-            $newStatus = $newBalance === 0
-                ? Billing::STATUS_PAID
-                : (($paidAmount + $currentAmount) === 0
-                    ? Billing::STATUS_UNPAID
-                    : Billing::STATUS_PARTIAL);
+            // Determine if this is the first payment
+            $isFirstPayment = ($paidAmount == 0);
 
-            Payment::create([
+            // Create payment record
+            $payment = Payment::create([
                 'billing_id' => $billingId,
                 'payment_date' => now(),
-                'amount_paid' => $request->amount,
-                'payment_method' => $request->payment_method,
+                'amount_paid' => $currentPayment,
+                'payment_method' => $validated['payment_method'],
                 'balance' => $newBalance,
-                'remarks' => $request->remarks ?? null,
+                'remarks' => $validated['remarks'] ?? null,
             ]);
 
-            $billing->update([
-                'billing_status' => $newStatus,
-            ]);
+            // Update billing status
+            $newStatus = $this->calculateBillingStatus($totalAmount, $paidAmount + $currentPayment);
+            $billing->update(['billing_status' => $newStatus]);
+
+            // Handle booking status updates
+            if ($isFirstPayment) {
+                $booking = $billing->booking;
+
+                // Update current booking to approved
+                $booking->update(['booking_status' => Booking::STATUS_APPROVED]);
+
+                // Mark conflicting bookings for reschedule
+                Booking::where('booking_date', $booking->booking_date)
+                    ->where('id', '!=', $booking->id)
+                    ->where('booking_status', '!=', Booking::STATUS_FOR_RESCHEDULE)
+                    ->update(['booking_status' => Booking::STATUS_FOR_RESCHEDULE]);
+            }
 
             DB::commit();
-            return $this->sendResponse('Payment created successfully.', TransactionResource::collection(Payment::where('billing_id', $billingId)->orderBy('payment_date')->get()));
+            return $this->sendResponse('Payment created successfully.', TransactionResource::collection(
+                Payment::where('billing_id', $billingId)
+                    ->orderBy('payment_date')
+                    ->get()
+            ));
         } catch (Exception $exception) {
             DB::rollBack();
             return $this->sendException($exception);
         }
+    }
+
+    private function calculateBillingStatus(float $totalAmount, float $paidTotal): int
+    {
+        if ($paidTotal >= $totalAmount) {
+            return Billing::STATUS_PAID;
+        }
+        return $paidTotal > 0 ? Billing::STATUS_PARTIAL : Billing::STATUS_UNPAID;
     }
 }

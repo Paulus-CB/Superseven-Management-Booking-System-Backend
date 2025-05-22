@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,11 +13,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Booking extends Model
 {
-    use HasFactory;
+    use SoftDeletes;
 
     public const STATUS_PENDING = 0;
     public const STATUS_APPROVED = 1;
     public const STATUS_REJECTED = 2;
+    public const STATUS_FOR_RESCHEDULE = 3;
     public const STATUS_UNASSIGNED = 0;
     public const STATUS_SCHEDULED = 1;
     public const STATUS_ACTIVE = 2;
@@ -28,6 +30,7 @@ class Booking extends Model
         self::STATUS_PENDING => 'Pending',
         self::STATUS_APPROVED => 'Approved',
         self::STATUS_REJECTED => 'Rejected',
+        self::STATUS_FOR_RESCHEDULE => 'For Reschedule',
     ];
 
     public const DELIVERABLE_STATUS = [

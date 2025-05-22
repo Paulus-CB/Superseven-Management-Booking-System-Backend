@@ -69,8 +69,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('/bookings')->group(function () {
         Route::get('/', [BookingController::class,'getBookings']);
         Route::post('/add', [BookingController::class,'addBooking']);
+        Route::get('/packages', [BookingController::class,'getAvailablePackages']);
+        Route::get('/{id}/addons', [BookingController::class,'getAvailableAddons']);
         Route::post('/{id}/update', [BookingController::class,'updateBooking']);
         Route::post('/{id}/delete', [BookingController::class,'deleteBooking']);
+        Route::post('/{id}/reschedule', [BookingController::class,'rescheduleBooking']);
     });
 
     //Billings
@@ -84,6 +87,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('/workload')->group(function () {
         Route::get('/', [WorkloadController::class,'getWorkloads']);
         Route::get('/{id}', [WorkloadController::class,'viewWorkload']);
+        Route::get('/{id}/employees', [WorkloadController::class,'getAvailableEmployee']);
         Route::post('/{id}/assign', [WorkloadController::class,'assignWorkload']);
     });
 });

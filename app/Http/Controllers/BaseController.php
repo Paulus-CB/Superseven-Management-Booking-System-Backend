@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class BaseController extends Controller
 {
-    public const PER_PAGE = 20;
+    public const PER_PAGE = 10;
 
     /**
      * Success response method.
