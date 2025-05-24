@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateBookingRequest extends FormRequest
+class AddFeedbackRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,24 +24,20 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'booking_date' => 'nullable|date|after_or_equal:+30 days',
-            'event_name' => 'nullable|string|max:100',
-            'package_id' => 'nullable|integer',
-            'booking_address' => 'nullable|string|max:100',
+            'feedback_details' => 'required|string|max:255',
         ];
     }
 
-    public function messages(): array
+    public function messages()
     {
         return [
-            'booking_date.date' => 'The booking date must be a valid date.',
-            'booking_date.after_or_equal'=> 'The booking date must be at least 30 days from today.',
-            'event_name.max' => 'The event name must not exceed 100 characters.',
-            'booking_address.max' => 'The booking address must not exceed 100 characters.',
+            'feedback_details.required' => 'Feedback details is required.',
+            'feedback_details.string' => 'Feedback details must be a string.',
+            'feedback_details.max' => 'Feedback details must not exceed 255 characters.',
         ];
     }
 
-        /**
+    /**
      * Handle a failed validation attempt.
      *
      * @param Validator $validator

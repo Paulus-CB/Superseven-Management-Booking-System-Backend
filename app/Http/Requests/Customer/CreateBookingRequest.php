@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateBookingRequest extends FormRequest
+class CreateBookingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,24 +24,31 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'booking_date' => 'nullable|date|after_or_equal:+30 days',
-            'event_name' => 'nullable|string|max:100',
-            'package_id' => 'nullable|integer',
-            'booking_address' => 'nullable|string|max:100',
+            'booking_date' => [
+                'date',
+                'required',
+                'after_or_equal:' . today()->addDays(30)->toDateString()
+            ],
+            'event_name' => 'required|string|max:100',
+            'package_id' => 'required|integer',
+            'booking_address' => 'required|string|max:100',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'booking_date.date' => 'The booking date must be a valid date.',
+            'booking_date.required'=> 'The booking date is required.',
             'booking_date.after_or_equal'=> 'The booking date must be at least 30 days from today.',
+            'event_name.required' => 'The event name is required.',
             'event_name.max' => 'The event name must not exceed 100 characters.',
+            'package_id.required' => 'The package ID is required.',
+            'booking_address.required' => 'The booking address is required.',
             'booking_address.max' => 'The booking address must not exceed 100 characters.',
         ];
     }
 
-        /**
+    /**
      * Handle a failed validation attempt.
      *
      * @param Validator $validator
