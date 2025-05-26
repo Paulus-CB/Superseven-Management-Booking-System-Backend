@@ -122,7 +122,7 @@ class BookingController extends BaseController
                 || count(array_diff($addOnIds, $currentAddOns)) > 0;
 
             if ($packageChanged || $addOnsChanged || $shouldUpdateBilling) {
-                $booking->package_id = $request->package_id;;
+                $booking->package_id = $request->package_id;
                 $booking->addons()->sync($addOnIds);
 
                 $this->bookingService->updateBillingStatement(
@@ -147,15 +147,68 @@ class BookingController extends BaseController
         $booking = Booking::find($bookingId);
 
         if (!$booking) {
-            return $this->sendError('Booking not found.');
+            return $this->sendError('Booking not found.', 404);
         }
 
         DB::beginTransaction();
         try {
+
             $booking->delete();
+            $booking->billing()->delete();
 
             DB::commit();
             return $this->sendResponse('Booking deleted successfully.');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return $this->sendException($exception);
+        }
+    }
+
+    public function setBookingToApprove(int $bookingId)
+    {
+        $booking = Booking::find($bookingId);
+
+        if (!$booking) {
+            return $this->sendError('Booking not found.', 404);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $booking->booking_status = Booking::STATUS_APPROVED;
+            $booking->save();
+
+            Booking::where('booking_date', $booking->booking_date)
+                ->where('booking_status', Booking::STATUS_PENDING)
+                ->where('id', '!=', $bookingId)
+                ->update(['booking_status' => Booking::STATUS_FOR_RESCHEDULE]);
+
+            DB::commit();
+            return $this->sendResponse('Booking approved successfully.', new BookingResource($booking));
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return $this->sendException($exception);
+        }
+    }
+
+    public function setBookingToReject(int $bookingId)
+    {
+        $booking = Booking::find($bookingId);
+
+        if (!$booking) {
+            return $this->sendError('Booking not found.', 404);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $booking->booking_status = Booking::STATUS_REJECTED;
+            $booking->save();
+
+            $booking->billing()->delete();
+
+            DB::commit();
+            return $this->sendResponse('Booking rejected successfully.', new BookingResource($booking));
         } catch (Exception $exception) {
             DB::rollBack();
             return $this->sendException($exception);

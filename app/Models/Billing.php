@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Billing extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public const STATUS_UNPAID = 0;
     public const STATUS_PARTIAL = 1;

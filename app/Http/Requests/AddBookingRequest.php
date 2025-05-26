@@ -31,6 +31,7 @@ class AddBookingRequest extends FormRequest
             'contact_no' => ['required','regex:/^(09\d{9}|\\+639\d{9})$/'],
             'booking_date' => [
                 'required',
+                'date',
                 'after_or_equal:' . today()->addDays(30)->toDateString()
             ],
             'package_id' => 'required|integer',

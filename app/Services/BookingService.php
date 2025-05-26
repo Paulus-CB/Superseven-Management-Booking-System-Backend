@@ -25,8 +25,8 @@ class BookingService
                 'condition' => "booking_status = " . Booking::STATUS_PENDING,
             ],
             'for_resched' => [
-                'type'=> 'or',
-                'condition'=> "booking_status = " . Booking::STATUS_FOR_RESCHEDULE,
+                'type' => 'or',
+                'condition' => "booking_status = " . Booking::STATUS_FOR_RESCHEDULE,
             ],
         ];
     }
@@ -75,23 +75,19 @@ class BookingService
         array $addOnIds,
         ?float $discount = null
     ) {
-
-        $billing = Billing::firstOrCreate( // Create if missing
-            ['booking_id' => $bookingId],
-            ['package_amount' => 0, 'add_on_amount' => 0, 'total_amount' => 0]
-        );
-
         $package = Package::findOrFail($packageId);
         $addOnAmount = AddOn::whereIn('id', $addOnIds)->sum('add_on_price');
-
         $baseTotal = $package->package_price + $addOnAmount;
-        $discountAmount = ($discount > 0) ? ($baseTotal * ($discount / 100)) : 0;
+        $discountAmount = $discount ? ($baseTotal * ($discount / 100)) : 0;
 
-        $billing->update([
-            'package_amount' => $package->package_price,
-            'add_on_amount' => $addOnAmount,
-            'total_amount' => $baseTotal - $discountAmount
-        ]);
+        Billing::updateOrCreate(
+            ['booking_id' => $bookingId],
+            [
+                'package_amount' => $package->package_price,
+                'add_on_amount' => $addOnAmount,
+                'total_amount' => $baseTotal - $discountAmount,
+            ]
+        );
     }
 
     public function getDiscountPercentage(string $bookingDate)

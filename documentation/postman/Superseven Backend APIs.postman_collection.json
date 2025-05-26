@@ -25,7 +25,7 @@
 								},
 								{
 									"key": "mid_name",
-									"value": "Authentico",
+									"value": "Autentico",
 									"type": "text"
 								},
 								{
@@ -77,7 +77,115 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Register Customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "Paul Jairus",
+											"type": "text"
+										},
+										{
+											"key": "mid_name",
+											"value": "Autentico",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "Caberte",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jairus@blendit.eu",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "testuser123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "testuser123",
+											"type": "text"
+										},
+										{
+											"key": "contact_no",
+											"value": "09292802802",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "Hinlayagan Ilaya, Trinidad, Bohol",
+											"type": "text"
+										},
+										{
+											"key": "customer_type",
+											"value": "1",
+											"description": "1 = Client\n2 = Coordinaror\n3 = Owner\n4 = Secretary\n5= Photographer\n6 = Editor\n7 = Freelancer",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/register",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.4.6"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 23 May 2025 11:16:47 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "superseven_management_booking_system_session=u8icaTxrviO3G3a90gyxmZbUtDr8zT4bFRX8D6hG; expires=Fri, 23 May 2025 13:16:47 GMT; Max-Age=7200; path=/; domain=localhost; httponly; samesite=lax"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"User registered successfully.\",\n    \"data\": {\n        \"id\": 5,\n        \"first_name\": \"Paul Jairus\",\n        \"mid_name\": \"Autentico\",\n        \"last_name\": \"Caberte\",\n        \"full_name\": \"Paul Jairus Autentico Caberte\",\n        \"email\": \"jairus@blendit.eu\",\n        \"contact_num\": \"09292802802\",\n        \"address\": \"Hinlayagan Ilaya, Trinidad, Bohol\",\n        \"email_verified_at\": null,\n        \"user_type\": \"Customer\",\n        \"user_role\": \"Client\",\n        \"status\": null\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "Login",
@@ -126,7 +234,79 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "admin_owner@test.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "TestUser123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/login",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.4.6"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 23 May 2025 11:17:20 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "superseven_management_booking_system_session=tBfr9px2JLYJfFvVIVFPs4B5QYDvIidGtMeNU8vH; expires=Fri, 23 May 2025 13:17:20 GMT; Max-Age=7200; path=/; domain=localhost; httponly; samesite=lax"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"User logged in successfully.\",\n    \"data\": {\n        \"id\": 1,\n        \"first_name\": \"Test\",\n        \"mid_name\": \"\",\n        \"last_name\": \"Owner\",\n        \"full_name\": \"Test  Owner\",\n        \"email\": \"admin_owner@test.com\",\n        \"contact_num\": \"09123456789\",\n        \"address\": \"Test Address\",\n        \"email_verified_at\": \"2025-05-23T11:15:37.000000Z\",\n        \"user_type\": \"Employee\",\n        \"user_role\": \"Owner\",\n        \"status\": \"active\"\n    },\n    \"access_token\": \"1|jveldFoASCMm4Evp98nEH0TJJjgoAAcdTSpttfwz763059fa\",\n    \"token_type\": \"Bearer\"\n}"
+						}
+					]
 				},
 				{
 					"name": "Logout",
@@ -158,7 +338,64 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Logout",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/logout",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.4.6"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 23 May 2025 11:17:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "superseven_management_booking_system_session=tBfr9px2JLYJfFvVIVFPs4B5QYDvIidGtMeNU8vH; expires=Fri, 23 May 2025 13:17:38 GMT; Max-Age=7200; path=/; domain=localhost; httponly; samesite=lax"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"message\": \"Logged Out!\",\n    \"data\": null\n}"
+						}
+					]
 				},
 				{
 					"name": "Change Password",
@@ -526,133 +763,162 @@
 			"name": "Package",
 			"item": [
 				{
-					"name": "Create Package",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "package_name",
-									"value": "Package A",
-									"type": "text"
-								},
-								{
-									"key": "package_details",
-									"value": "This is the details of package a",
-									"type": "text"
-								},
-								{
-									"key": "package_price",
-									"value": "5000.00",
-									"type": "text"
+					"name": "Customer",
+					"item": [
+						{
+							"name": "Fetch packages",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/customer/packages",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"packages"
+									]
 								}
-							]
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Create Package",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "package_name",
+											"value": "Package A",
+											"type": "text"
+										},
+										{
+											"key": "package_details",
+											"value": "This is the details of package a",
+											"type": "text"
+										},
+										{
+											"key": "package_price",
+											"value": "5000.00",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/packages/add",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"packages",
+										"add"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/api/packages/add",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"packages",
-								"add"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
+						{
+							"name": "Fetch Packages",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/packages?search[value]=",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"packages"
+									],
+									"query": [
+										{
+											"key": "search[value]",
+											"value": ""
+										}
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Fetch Packages",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/packages?search[value]=",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"packages"
-							],
-							"query": [
-								{
-									"key": "search[value]",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Package",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "package_name",
-									"value": "Package D",
-									"type": "text"
-								},
-								{
-									"key": "package_details",
-									"value": "This is the details of package d",
-									"type": "text"
-								},
-								{
-									"key": "package_price",
-									"value": "7000.00",
-									"type": "text"
-								}
-							]
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/api/packages/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"packages",
-								"1"
-							]
+						{
+							"name": "Update Package",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "package_name",
+											"value": "Package D",
+											"type": "text"
+										},
+										{
+											"key": "package_details",
+											"value": "This is the details of package d",
+											"type": "text"
+										},
+										{
+											"key": "package_price",
+											"value": "7000.00",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/packages/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"packages",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Package",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/packages/1/delete",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"packages",
+										"1",
+										"delete"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Package",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/packages/1/delete",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"packages",
-								"1",
-								"delete"
-							]
-						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -660,139 +926,334 @@
 			"name": "Addon",
 			"item": [
 				{
-					"name": "Create Addon",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "add_on_name",
-									"value": "Addon C",
-									"type": "text"
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Create Addon",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "add_on_name",
+											"value": "Addon C",
+											"type": "text"
+										},
+										{
+											"key": "add_on_details",
+											"value": "This is the details of addon c",
+											"type": "text"
+										},
+										{
+											"key": "add_on_price",
+											"value": "1500.00",
+											"type": "text"
+										}
+									]
 								},
-								{
-									"key": "add_on_details",
-									"value": "This is the details of addon c",
-									"type": "text"
-								},
-								{
-									"key": "add_on_price",
-									"value": "1500.00",
-									"type": "text"
+								"url": {
+									"raw": "{{url}}/api/addons/add",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"addons",
+										"add"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/api/addons/add",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"addons",
-								"add"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
+						{
+							"name": "Fetch Addon",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/addons?search[value]=",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"addons"
+									],
+									"query": [
+										{
+											"key": "search[value]",
+											"value": ""
+										}
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Fetch Addon",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/addons?search[value]=",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"addons"
-							],
-							"query": [
-								{
-									"key": "search[value]",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Package",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "add_on_name",
-									"value": "Addon A",
-									"type": "text"
-								},
-								{
-									"key": "add_on_details",
-									"value": "This is the details of addon a",
-									"type": "text"
-								},
-								{
-									"key": "add_on_price",
-									"value": "1600.00",
-									"type": "text"
-								}
-							]
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/api/addons/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"addons",
-								"1"
-							]
+						{
+							"name": "Update Package",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "add_on_name",
+											"value": "Addon A",
+											"type": "text"
+										},
+										{
+											"key": "add_on_details",
+											"value": "This is the details of addon a",
+											"type": "text"
+										},
+										{
+											"key": "add_on_price",
+											"value": "1600.00",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/addons/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"addons",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Package",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/addons/3/delete",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"addons",
+										"3",
+										"delete"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Delete Package",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/addons/3/delete",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"addons",
-								"3",
-								"delete"
-							]
+					"name": "Customer",
+					"item": [
+						{
+							"name": "Fetch Addons",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/customer/addons",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"addons"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
 		{
 			"name": "Booking",
 			"item": [
+				{
+					"name": "Customer",
+					"item": [
+						{
+							"name": "Fetch Bookings",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/customer/bookings?month=6&year=2026",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"bookings"
+									],
+									"query": [
+										{
+											"key": "month",
+											"value": "6"
+										},
+										{
+											"key": "year",
+											"value": "2026"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Booking",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "booking_date",
+											"value": "2026-03-20",
+											"type": "text"
+										},
+										{
+											"key": "event_name",
+											"value": "Lonie and Kai's Wedding",
+											"type": "text"
+										},
+										{
+											"key": "booking_address",
+											"value": "Loay, Bohol",
+											"type": "text"
+										},
+										{
+											"key": "package_id",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "addon_id[0]",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "addon_id[1]",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/customer/bookings/create",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"bookings",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Booking",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "booking_date",
+											"value": "2026-02-02",
+											"type": "text"
+										},
+										{
+											"key": "event_name",
+											"value": "Paul Birthday Shoot",
+											"type": "text"
+										},
+										{
+											"key": "booking_address",
+											"value": "Hinlayagan Ilaya, Trinidad, Bohol",
+											"type": "text"
+										},
+										{
+											"key": "package_id",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "addon_id[0]",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "addon_id[1]",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/customer/bookings/12/update",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"bookings",
+										"12",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete booking",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/customer/bookings/13/delete",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"bookings",
+										"13",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Admin",
 					"item": [
@@ -1030,6 +1491,46 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Set booking to Approve",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/bookings/12/approve",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"bookings",
+										"12",
+										"approve"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Set booking to Rejected",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/bookings/12/reject",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"bookings",
+										"12",
+										"reject"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -1165,96 +1666,173 @@
 			"name": "Billings",
 			"item": [
 				{
-					"name": "Get Billings",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/billings/?search[value]=&start_year=2025&end_year=2026",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"billings",
-								""
-							],
-							"query": [
-								{
-									"key": "search[value]",
-									"value": ""
-								},
-								{
-									"key": "start_year",
-									"value": "2025"
-								},
-								{
-									"key": "end_year",
-									"value": "2026"
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Get Billings",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/billings/?search[value]=&start_year=2025&end_year=2026",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"billings",
+										""
+									],
+									"query": [
+										{
+											"key": "search[value]",
+											"value": ""
+										},
+										{
+											"key": "start_year",
+											"value": "2025"
+										},
+										{
+											"key": "end_year",
+											"value": "2026"
+										}
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Payment",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "amount",
-									"value": "2400",
-									"type": "text"
-								},
-								{
-									"key": "payment_method",
-									"value": "0",
-									"type": "text"
-								},
-								{
-									"key": "remarks",
-									"value": "down payment",
-									"type": "text"
-								}
-							]
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/api/billings/1/add-payment",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"billings",
-								"1",
-								"add-payment"
-							]
+						{
+							"name": "Add Payment",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "amount",
+											"value": "2400",
+											"type": "text"
+										},
+										{
+											"key": "payment_method",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "remarks",
+											"value": "down payment",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/billings/1/add-payment",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"billings",
+										"1",
+										"add-payment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Billing",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/billings/7",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"billings",
+										"7"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "View Billing",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/billings/7",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"billings",
-								"7"
-							]
+					"name": "Client",
+					"item": [
+						{
+							"name": "Fetch Billings",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{url}}/api/customer/billings?search[value]=&start_year=2025&end_year=2026",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"billings"
+									],
+									"query": [
+										{
+											"key": "search[value]",
+											"value": ""
+										},
+										{
+											"key": "start_year",
+											"value": "2025"
+										},
+										{
+											"key": "end_year",
+											"value": "2026"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Billing",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{url}}/api/customer/billings/13",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"billings",
+										"13"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -1504,6 +2082,65 @@
 										"feedbacks",
 										"1",
 										"mark-as-unposted"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Client",
+					"item": [
+						{
+							"name": "Add Feedback",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "feedback_details",
+											"value": "Very nice jud sha untag mag dugay pani inyohang studio.",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/customer/bookings/12/feedback/add",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"bookings",
+										"12",
+										"feedback",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View feedback",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/customer/bookings/12/feedback/view",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"bookings",
+										"12",
+										"feedback",
+										"view"
 									]
 								}
 							},

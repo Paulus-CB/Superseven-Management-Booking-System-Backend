@@ -29,7 +29,7 @@ class Feedback extends Model
      */
     protected $fillable = [
         'booking_id',
-        'customer_id',
+        'user_id',
         'feedback_date',
         'feedback_details',
     ];
