@@ -178,6 +178,11 @@ class BookingController extends BaseController
             $booking->booking_status = Booking::STATUS_APPROVED;
             $booking->save();
 
+            Booking::where('booking_date', $booking->booking_date)
+                ->where('booking_status', Booking::STATUS_PENDING)
+                ->where('id', '!=', $bookingId)
+                ->update(['booking_status' => Booking::STATUS_FOR_RESCHEDULE]);
+
             DB::commit();
             return $this->sendResponse('Booking approved successfully.', new BookingResource($booking));
         } catch (Exception $exception) {
