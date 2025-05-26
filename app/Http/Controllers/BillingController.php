@@ -97,6 +97,7 @@ class BillingController extends BaseController
                 // Mark conflicting bookings for reschedule
                 Booking::where('booking_date', $booking->booking_date)
                     ->where('id', '!=', $booking->id)
+                    ->where('booking_status', '!=', Booking::STATUS_REJECTED)
                     ->where('booking_status', '!=', Booking::STATUS_FOR_RESCHEDULE)
                     ->update(['booking_status' => Booking::STATUS_FOR_RESCHEDULE]);
             }
