@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\BookingController as CustomerBookingController
 use App\Http\Controllers\Customer\PackageController as CustomerPackageController;
 use App\Http\Controllers\Customer\BillingController as CustomerBillingController;
 use App\Http\Controllers\DateController;
+use App\Http\Controllers\Employee\WorkloadController as EmployeeWorkloadController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\User\Customer\CustomerAccountController;
@@ -139,6 +140,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('/billings')->group(function () {
             Route::get('/', [CustomerBillingController::class, 'getBillings']);
             Route::get('/{id}', [CustomerBillingController::class, 'viewBilling']);
+        });
+    });
+
+    //Employee Routes (Photographer/Editor)
+    Route::prefix('/employee')->group(function () {
+        
+        // Workload
+        Route::prefix('/workloads')->group(function () {
+            Route::get('/', [EmployeeWorkloadController::class, 'getWorkloads']);
+            Route::get('/{id}/view', [EmployeeWorkloadController::class, 'viewWorkload'])->name('workload.detail');
+            Route::post('/{id}/update', [EmployeeWorkloadController::class, 'updateWorkload'])->name('workload.update');
         });
     });
 });
