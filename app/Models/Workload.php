@@ -14,6 +14,8 @@ class Workload extends Pivot
     protected $fillable = [
         'employee_id',
         'booking_id',
+        'workload_status',
+        'date_uploaded'
     ];
 
     /**
@@ -35,5 +37,5 @@ class Workload extends Pivot
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
 }

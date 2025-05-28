@@ -21,10 +21,11 @@ class Booking extends Model
     public const STATUS_FOR_RESCHEDULE = 3;
     public const STATUS_UNASSIGNED = 0;
     public const STATUS_SCHEDULED = 1;
-    public const STATUS_ACTIVE = 2;
-    public const STATUS_EDITING = 3;
-    public const STATUS_FOR_RELEASE = 4;
-    public const STATUS_COMPLETED = 5;
+    public const STATUS_UPLOADED = 2;
+    public const STATUS_FOR_EDIT = 3;
+    public const STATUS_EDITING = 4;
+    public const STATUS_FOR_RELEASE = 5;
+    public const STATUS_COMPLETED = 6;
 
     public const STATUS = [
         self::STATUS_PENDING => 'Pending',
@@ -36,10 +37,18 @@ class Booking extends Model
     public const DELIVERABLE_STATUS = [
         self::STATUS_UNASSIGNED => 'Unassigned',
         self::STATUS_SCHEDULED => 'Scheduled',
-        self::STATUS_ACTIVE => 'Active',
+        self::STATUS_UPLOADED => 'Uploaded',
+        self::STATUS_FOR_EDIT => 'For Edit',
         self::STATUS_EDITING => 'Editing',
         self::STATUS_FOR_RELEASE => 'For Release',
         self::STATUS_COMPLETED => 'Completed',
+    ];
+
+    public const WORKLOAD_STATUS = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_UPLOADED => 'Uploaded',
+        self::STATUS_EDITING => 'Editing',
+        self::STATUS_FOR_RELEASE => 'For Release',
     ];
 
     /**
@@ -97,7 +106,10 @@ class Booking extends Model
      */
     public function employees(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'workload')->using(Workload::class);
+        return $this->belongsToMany(User::class, 'workload')
+            ->using(Workload::class)
+            ->withPivot('id', 'workload_status', 'date_uploaded')
+            ->withTimestamps();
     }
 
     /**
