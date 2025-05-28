@@ -1983,6 +1983,94 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Employee",
+					"item": [
+						{
+							"name": "Get Workloads",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/employee/workloads?search[value]=&filters[deliverable_status]=false",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"employee",
+										"workloads"
+									],
+									"query": [
+										{
+											"key": "search[value]",
+											"value": ""
+										},
+										{
+											"key": "filters[deliverable_status]",
+											"value": "false",
+											"description": "3 => Editing\n4 => For Release\n5 => Completed"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Workload",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/employee/workloads/12/view",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"employee",
+										"workloads",
+										"12",
+										"view"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update workload",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "workload_status",
+											"value": "2",
+											"description": "For Photographer:\n2 => Uploaded\n\nFor Editor:\n4 => Editing\n5 => For Release",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/employee/workloads/12/update",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"employee",
+										"workloads",
+										"12",
+										"update"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},

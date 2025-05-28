@@ -63,7 +63,10 @@ class WorkloadController extends BaseController
 
             $booking->employees()->detach(array_diff($existingUserIds, $userIds));
 
-            $booking->employees()->attach(array_diff($userIds, $existingUserIds));
+            $booking->employees()->attach(array_diff($userIds, $existingUserIds), 
+                [
+                    'workload_status' => Booking::STATUS_PENDING
+                ]);
 
             $booking->completion_date = $request->completion_date;
             $booking->deliverable_status = $request->deliverable_status;
