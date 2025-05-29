@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('/report')->group(function () {
         Route::get('/bookings', [ReportController::class, 'getNoOfBookings']);
         Route::get('/packages', [ReportController::class, 'getNoOfPackages']);
+        Route::get('/transactions', [ReportController::class, 'getTransactions']);
     });
 
     //Customer Routes

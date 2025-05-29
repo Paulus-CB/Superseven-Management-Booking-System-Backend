@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GenerateReportRequest;
 use App\Models\Booking;
 use App\Models\Package;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -59,5 +60,13 @@ class ReportController extends BaseController
         });
 
         return $this->sendResponse('Report generated successfully.', $result);
+    }
+
+    public function getTransactions(GenerateReportRequest $request)
+    {
+        $startYear = $request->input('start_year', now()->year);
+        $endYear = $request->input('end_year', now()->addYear()->year);
+
+        
     }
 }
