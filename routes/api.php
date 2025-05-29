@@ -12,6 +12,7 @@ use App\Http\Controllers\DateController;
 use App\Http\Controllers\Employee\WorkloadController as EmployeeWorkloadController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\User\Customer\CustomerAccountController;
 use App\Http\Controllers\User\Employee\EmployeeAccountController;
 use App\Http\Controllers\User\UserController;
@@ -108,6 +109,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [FeedbackController::class, 'viewFeedback'])->name('feedback.detail');
         Route::post('/{id}/mark-as-posted', [FeedbackController::class, 'markFeedbackAsPosted']);
         Route::post('/{id}/mark-as-unposted', [FeedbackController::class, 'markFeedBackAsUnposted']);
+    });
+
+    //Reports
+    Route::prefix('/report')->group(function () {
+        Route::get('/bookings', [ReportController::class, 'getNoOfBookings']);
+        Route::get('/packages', [ReportController::class, 'getNoOfPackages']);
     });
 
     //Customer Routes
