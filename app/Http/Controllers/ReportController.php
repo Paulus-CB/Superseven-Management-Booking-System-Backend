@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GenerateReportRequest;
+use App\Http\Resources\Collections\ReportBookingCollection;
 use App\Models\Booking;
 use App\Models\Package;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReportController extends BaseController
 {
@@ -20,13 +20,14 @@ class ReportController extends BaseController
             ->selectRaw('MONTH(booking_date) as month, COUNT(*) as count')
             ->whereYear('booking_date', $year)
             ->where('booking_status', Booking::STATUS_APPROVED)
+            ->where('deliverable_status', Booking::STATUS_COMPLETED)
             ->groupByRaw('MONTH(booking_date)')
             ->orderByRaw('MONTH(booking_date)')
             ->pluck('count', 'month');
 
         // Map month numbers to names and fill missing months with 0
         $monthlyData = collect(range(1, 12))->mapWithKeys(function ($month) use ($bookings) {
-            $monthName = \Carbon\Carbon::create()->month($month)->format('F');
+            $monthName = Carbon::create()->month($month)->format('F');
             return [$monthName => $bookings->get($month, 0)];
         });
 
@@ -41,6 +42,7 @@ class ReportController extends BaseController
         $packages = Package::withCount([
             'bookings as bookings_count' => function ($query) use ($year, $month) {
                 $query->where('booking_status', Booking::STATUS_APPROVED);
+                $query->where('deliverable_status', Booking::STATUS_COMPLETED);
     
                 if ($year) {
                     $query->whereYear('booking_date', $year);
@@ -67,6 +69,13 @@ class ReportController extends BaseController
         $startYear = $request->input('start_year', now()->year);
         $endYear = $request->input('end_year', now()->addYear()->year);
 
-        
+        $bookings = Booking::with('customer', 'package', 'addOns')
+            ->whereBetween('booking_date', [$startYear . '-01-01', $endYear . '-12-31'])
+            ->where('booking_status', Booking::STATUS_APPROVED)
+            ->orderBy('booking_date', 'desc');
+
+            $paginated = $bookings->paginate(self::PER_PAGE);
+
+        return $this->sendResponse('Report generated successfully.', new ReportBookingCollection($paginated));
     }
 }
