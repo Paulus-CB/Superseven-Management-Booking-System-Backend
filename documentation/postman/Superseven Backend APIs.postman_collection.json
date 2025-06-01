@@ -1252,6 +1252,26 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "View Booking",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/customer/bookings/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"bookings",
+										"1"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -1528,6 +1548,25 @@
 										"bookings",
 										"12",
 										"reject"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Booking",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/bookings/2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"bookings",
+										"2"
 									]
 								}
 							},
