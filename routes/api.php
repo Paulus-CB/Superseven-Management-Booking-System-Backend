@@ -79,6 +79,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/packages', [BookingController::class, 'getAvailablePackages']);
 
         Route::prefix('/{id}')->group(function () {
+            Route::get('/', [BookingController::class, 'viewBooking']);
             Route::get('/addons', [BookingController::class, 'getAvailableAddons']);
             Route::post('/update', [BookingController::class, 'updateBooking']);
             Route::post('/delete', [BookingController::class, 'deleteBooking']);
@@ -138,9 +139,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/{id}/update', [CustomerBookingController::class, 'updateBooking']);
             Route::post('/{id}/delete', [CustomerBookingController::class, 'deleteBooking']);
 
-            Route::prefix('/{id}/feedback')->group(function () {
-                Route::get('/view', [CustomerBookingController::class, 'viewFeedback'])->name('feedback.view');
-                Route::post('/add', [CustomerBookingController::class, 'addFeedback'])->name('feedback.add');
+            Route::prefix('/{id}')->group(function () {
+                Route::get('/', [CustomerBookingController::class, 'viewBooking']);
+
+                Route::prefix('/feedback')->group(function () {
+                    Route::get('/view', [CustomerBookingController::class, 'viewFeedback'])->name('feedback.view');
+                    Route::post('/add', [CustomerBookingController::class, 'addFeedback'])->name('feedback.add');
+                });
             });
         });
 
@@ -153,7 +158,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //Employee Routes (Photographer/Editor)
     Route::prefix('/employee')->group(function () {
-        
+
         // Workload
         Route::prefix('/workloads')->group(function () {
             Route::get('/', [EmployeeWorkloadController::class, 'getWorkloads']);

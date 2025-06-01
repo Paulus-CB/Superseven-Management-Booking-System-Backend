@@ -45,6 +45,22 @@ class BookingController extends BaseController
         return $this->sendResponse('Bookings retrieved successfully.', BookingResource::collection($bookings));
     }
 
+    public function viewBooking(int $bookingId)
+    {
+        $user = auth()->user();
+
+        $booking = Booking::with('customer', 'package', 'addOns')
+            ->where('id', $bookingId)
+            ->where('customer_id', $user->id)
+            ->first();
+
+        if (!$booking) {
+            return $this->sendError('Booking not found.', 404);
+        }
+
+        return $this->sendResponse('Booking retrieved successfully.', new BookingResource($booking));
+    }
+
     public function createBooking(CreateBookingRequest $request)
     {
         $user = auth()->user();
