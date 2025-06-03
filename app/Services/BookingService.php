@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Mail\Admin\ReceivedBooking;
+use App\Mail\Client\CompletedBooking;
 use App\Models\AddOn;
 use App\Models\Billing;
 use App\Models\Booking;
@@ -10,6 +12,7 @@ use App\Models\Package;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class BookingService
 {
@@ -119,5 +122,37 @@ class BookingService
                     'booking_address' => $booking->booking_address
                 ];
             });
+    }
+
+    public function sendMailToAdmin(Booking $booking)
+    {
+        $recipients = User::has('employee')
+            ->whereHas('employee', function ($query) {
+                $query->whereIn('employee_type', [
+                    User::OWNER_TYPE,
+                    User::SECRETARY_TYPE   
+                ]);
+            })->get();
+        
+        if (!$recipients) {
+            return false;
+        }
+
+        foreach ($recipients as $recipient) {
+            $toSend = new ReceivedBooking($booking, $recipient->first_name);
+
+            Mail::to($recipient->email)->queue($toSend);
+        }
+    }
+
+    public function sendMailToCustomer(Booking $booking)
+    {
+        if (!$booking) {
+            return false;
+        }
+
+        $toSend = new CompletedBooking($booking);
+
+        Mail::to($booking->customer->email)->queue($toSend);
     }
 }
