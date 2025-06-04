@@ -105,7 +105,21 @@ class BookingController extends BaseController
     public function updateBooking(int $bookingId, UpdateBookingRequest $request)
     {
         $request->validated();
-        $booking = Booking::findOrFail($bookingId);
+
+        $existingBooking = Booking::where('id', '!=', $bookingId)
+            ->where('booking_date', $request->booking_date)
+            ->where('booking_status', Booking::STATUS_APPROVED)
+            ->first();
+
+        if ($existingBooking) {
+            return $this->sendError('Booking already exists for this date.', 400);
+        }
+
+        $booking = Booking::find($bookingId);
+
+        if (!$booking) {
+            return $this->sendError('Booking not found.', 404);
+        }
 
         DB::beginTransaction();
         try {
@@ -230,8 +244,17 @@ class BookingController extends BaseController
     {
         $validated = $request->validated();
 
+        $existingBooking = Booking::where('id', '!=', $bookingId)
+            ->where('booking_date', $validated['booking_date'])
+            ->where('booking_status', Booking::STATUS_APPROVED)
+            ->first();
+
+        if ($existingBooking) {
+            return $this->sendError('Booking already exists for this date.', 400);
+        }
+
         $booking = Booking::where('id', $bookingId)
-            ->where('booking_status', Booking::STATUS_FOR_RESCHEDULE)->first();
+        ->where('booking_status', Booking::STATUS_FOR_RESCHEDULE)->first();
 
         if (!$booking) {
             return $this->sendError('Booking not found.', 404);
@@ -241,8 +264,12 @@ class BookingController extends BaseController
         try {
 
             $booking->booking_date = $validated['booking_date'];
-            $booking->booking_status = Booking::STATUS_PENDING;
+            $booking->booking_status = Booking::STATUS_APPROVED;
             $booking->save();
+
+            $this->bookingService->sendRescheduleMailToAdmin($booking);
+
+            $this->bookingService->sendRescheduleMailToCustomer($booking);
 
             DB::commit();
             return $this->sendResponse('Booking rescheduled successfully.', new BookingResource($booking));
