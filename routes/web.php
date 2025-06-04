@@ -19,3 +19,15 @@ Route::get('/mailable/client/booking', function () {
 
     return new App\Mail\Client\CompletedBooking($booking);
 });
+
+Route::get('/admin/reschedule', function () {
+    $booking = App\Models\Booking::inRandomOrder()->first();
+
+    return new App\Mail\Admin\ReceivedReschedule($booking, 'Lonie Jay');
+});
+
+Route::get('/client/reschedule', function () {
+    $booking = App\Models\Booking::inRandomOrder()->first();
+
+    return new App\Mail\Client\CompletedReschedule($booking);
+});
