@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Mail\Admin\WorkloadUploaded;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class WorkloadService
 {
@@ -50,7 +52,7 @@ class WorkloadService
             $booking->deliverable_status = $newBookingStatus;
             $booking->save();
 
-            $this->notifyStatusChange($booking, $currentStatus, $newBookingStatus);
+            $this->notifyStatusChange($booking, $currentStatus, $newBookingStatus, $employee->full_name);
         }
     }
 
@@ -65,14 +67,41 @@ class WorkloadService
             ->pluck('pivot.workload_status');
     }
 
-    private function notifyStatusChange(Booking $booking, int $oldStatus, int $newStatus)
+    private function notifyStatusChange(Booking $booking, int $oldStatus, int $newStatus, string $employeeName)
     {
-        Log::info("Booking status updated", [
-            'booking_id' => $booking->id,
-            'old_status' => $oldStatus,
-            'new_status' => $newStatus
-        ]);
+        $formatStatus = Booking::STATUS[$newStatus];
 
-        // Future notification implementation will go here
+        if ($newStatus === Booking::STATUS_UPLOADED) {
+            $recipients = $this->fetchOwners();
+
+            foreach ($recipients as $recipient) {
+                $toSend = new WorkloadUploaded($booking, $formatStatus, $recipient->first_name, $employeeName);
+
+                Mail::to($recipient->email)->queue($toSend);
+            }
+        }
+
+        if ($newStatus === Booking::STATUS_EDITING) {
+            $recipients = $this->fetchOwners();
+
+            foreach ($recipients as $recipient) {
+                
+            }
+        }
+
+        if ($newStatus === Booking::STATUS_FOR_RELEASE) {
+
+        }
+
+    }
+
+    private function fetchOwners()
+    {
+        $owners = User::has('employee')
+            ->whereHas('employee', function ($query) {
+                $query->where('employee_type', User::OWNER_TYPE);
+            })->get();
+
+        return $owners ?? [];
     }
 }
