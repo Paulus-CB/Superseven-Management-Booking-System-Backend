@@ -12,7 +12,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class WorkloadEditing extends Mailable
+class WorkloadRelease extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -20,7 +20,7 @@ class WorkloadEditing extends Mailable
     private string $clientName;
     private string $eventName;
     private string $bookingDate;
-    private string $dateUpdated;
+    private string $dateReleased;
     private string $workloadStatus;
     private string $recipient;
     private string $employeeName;
@@ -34,7 +34,7 @@ class WorkloadEditing extends Mailable
         $this->clientName = $booking->customer ? $booking->customer->full_name : null;
         $this->eventName = $booking->event_name;
         $this->bookingDate = $booking->booking_date;
-        $this->dateUpdated = $booking->updated_at;
+        $this->dateReleased = $booking->updated_at;
         $this->workloadStatus = $status;
         $this->recipient = $recipient;
         $this->employeeName = $employeeName;
@@ -47,7 +47,7 @@ class WorkloadEditing extends Mailable
     {
         return new Envelope(
             from: new Address(config('mail.from.address'), 'SuperSeven Studio'),
-            subject: "File status set to {$this->workloadStatus}",
+            subject: 'Releasing',
         );
     }
 
@@ -57,7 +57,7 @@ class WorkloadEditing extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.admin.workload.editing',
+            markdown: 'mail.admin.workload.release',
             with: $this->getEmailDetails(),
         );
     }
@@ -78,7 +78,7 @@ class WorkloadEditing extends Mailable
             'client_name' => $this->clientName,
             'event_name' => $this->eventName,
             'booking_date' => Carbon::parse($this->bookingDate)->format('F d, Y'),
-            'date' => Carbon::parse($this->dateUpdated)->format('F d, Y'),
+            'date' => Carbon::parse($this->dateReleased)->format('F d, Y'),
             'workload_status' => $this->workloadStatus,
             'link' => [
                 'url' => config('app.frontend_url') . "/workload/{$this->bookingId}",

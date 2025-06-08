@@ -1,15 +1,17 @@
 <x-mail::message>
-# Hello {{ $recipient }},
+# Hi {{ $recipient }},
 
-The status of the following Workload **{{ $event_name }}** has been updated to **{{ $workload_status }}**.
+The booking for **{{ $event_name }}** has moved to the **Releasing** stage.
 
 * Client Name: **{{ $client_name }}**
 * Event Name: **{{ $event_name }}**
 * Booking Date: **{{ $booking_date }}**
 * Date: **{{ $date }}**
-* Updated by: **{{ $employee_name }}**
+* Released by: **{{ $employee_name }}**
 
 <x-mail::button :url="$link['url']">
 View Workload
 </x-mail::button>
+
+Please review all final outputs carefully before releasing to the client.
 </x-mail::message>
