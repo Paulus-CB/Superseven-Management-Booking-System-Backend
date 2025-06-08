@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Mail\Admin\WorkloadEditing;
+use App\Mail\Admin\WorkloadRelease;
 use App\Mail\Admin\WorkloadUploaded;
 use App\Models\Booking;
 use App\Models\User;
@@ -20,7 +22,7 @@ class WorkloadService
         ];
     }
 
-    public function updateBookingStatus(Booking $booking, int $newWorkloadStatus, User $employee)
+    public function updateBookingStatus(Booking $booking, User $employee, int $newWorkloadStatus)
     {
         $currentStatus = $booking->deliverable_status;
         $newBookingStatus = $currentStatus;
@@ -69,7 +71,7 @@ class WorkloadService
 
     private function notifyStatusChange(Booking $booking, int $oldStatus, int $newStatus, string $employeeName)
     {
-        $formatStatus = Booking::STATUS[$newStatus];
+        $formatStatus = Booking::DELIVERABLE_STATUS[$newStatus];
 
         if ($newStatus === Booking::STATUS_UPLOADED) {
             $recipients = $this->fetchOwners();
@@ -85,14 +87,21 @@ class WorkloadService
             $recipients = $this->fetchOwners();
 
             foreach ($recipients as $recipient) {
-                
+                $toSend = new WorkloadEditing($booking, $formatStatus, $recipient->first_name, $employeeName);
+
+                Mail::to($recipient->email)->queue($toSend);
             }
         }
 
         if ($newStatus === Booking::STATUS_FOR_RELEASE) {
+            $recipients = $this->fetchOwners();
 
+            foreach ($recipients as $recipient) {
+                $toSend = new WorkloadRelease($booking, $formatStatus, $recipient->first_name, $employeeName);
+
+                Mail::to($recipient->email)->queue($toSend);
+            }
         }
-
     }
 
     private function fetchOwners()
