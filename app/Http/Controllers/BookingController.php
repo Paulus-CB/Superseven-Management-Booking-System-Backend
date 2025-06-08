@@ -253,8 +253,7 @@ class BookingController extends BaseController
             return $this->sendError('Booking already exists for this date.', 400);
         }
 
-        $booking = Booking::where('id', $bookingId)
-        ->where('booking_status', Booking::STATUS_FOR_RESCHEDULE)->first();
+        $booking = Booking::where('id', $bookingId)->first();
 
         if (!$booking) {
             return $this->sendError('Booking not found.', 404);
