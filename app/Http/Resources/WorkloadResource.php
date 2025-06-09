@@ -24,6 +24,7 @@ class WorkloadResource extends JsonResource
             'event_name' => $this->event_name,
             'customer_name ' => $this->customer->full_name,
             'booking_address' => $this->booking_address,
+            'expected_completion_date' => Carbon::parse($this->completion_date)->addMonths(3)->format('F d, Y'),
             'completion_date' => Carbon::parse($this->completion_date)->format('F d, Y'),
             'booking_workload_status' => Booking::DELIVERABLE_STATUS[$this->deliverable_status],
             $this->mergeWhen($request->route()->named('workload.detail', 'workload.update'), [
