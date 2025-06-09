@@ -7,6 +7,7 @@ use App\Http\Requests\PaginateRequest;
 use App\Http\Resources\Collections\WorkloadCollection;
 use App\Http\Resources\AddEmployeeWorkloadResource;
 use App\Http\Resources\WorkloadResource;
+use App\Services\WorkloadService;
 use App\Models\Booking;
 use App\Models\User;
 use Exception;
@@ -15,6 +16,14 @@ use Illuminate\Support\Facades\DB;
 
 class WorkloadController extends BaseController
 {
+    private WorkloadService $workloadService;
+    private const NOT_SENT = 0;
+
+    public function __construct(WorkloadService $workloadService)
+    {
+        $this->workloadService = $workloadService;
+    }
+
     public function getWorkloads(PaginateRequest $request)
     {
         $workloads = Booking::with('customer', 'employees')
@@ -49,7 +58,7 @@ class WorkloadController extends BaseController
     {
         $request->validated();
 
-        $booking = Booking::find($id);
+        $booking = Booking::where('id', $id)->first();
 
         if (!$booking) {
             return $this->sendError('Booking not found.', 404);
@@ -62,15 +71,21 @@ class WorkloadController extends BaseController
             $existingUserIds = $booking->employees()->pluck('users.id')->toArray();
 
             $booking->employees()->detach(array_diff($existingUserIds, $userIds));
-
             $booking->employees()->attach(array_diff($userIds, $existingUserIds), 
                 [
                     'workload_status' => Booking::STATUS_PENDING
                 ]);
 
-            $booking->completion_date = $request->completion_date;
             $booking->deliverable_status = $request->deliverable_status;
             $booking->link = $request->link;
+
+            if ($booking->sent_completed_mail == Booking::MAIL_NOT_SENT && $request->input('deliverable_status') == Booking::STATUS_COMPLETED) {
+                
+                $booking->sent_completed_mail = Booking::MAIL_SENT;
+                $booking->completion_date = now();
+
+                $this->workloadService->sendCompletedMailToClient($booking, $booking->customer->email);
+            }
 
             $booking->save();
 

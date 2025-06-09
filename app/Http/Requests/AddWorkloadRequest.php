@@ -24,7 +24,6 @@ class AddWorkloadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'completion_date' => 'required|date|after_or_equal:today',
             'deliverable_status' => 'nullable|integer',
             'link' => 'required|url',
         ];
@@ -33,9 +32,6 @@ class AddWorkloadRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'completion_date.required' => 'The completion date is required.',
-            'completion_date.date' => 'The completion date must be a valid date.',
-            'completion_date.after_or_equal' => 'The completion date must be after or equal to today.',
             'deliverable_status.integer' => 'The deliverable status must be an integer.',
             'link.required' => 'The link is required.',
             'link.url' => 'The link must be a valid URL.',
