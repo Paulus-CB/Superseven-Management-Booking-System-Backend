@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Mail\Admin\WorkloadEditing;
 use App\Mail\Admin\WorkloadRelease;
 use App\Mail\Admin\WorkloadUploaded;
+use App\Mail\Client\CompletedWorkload;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -20,6 +21,13 @@ class WorkloadService
                 'condition' => 'deliverable_status = ' . $filter['deliverable_status'],
             ]
         ];
+    }
+
+    public function sendCompletedMailToClient(Booking $booking, string $recipient)
+    {
+        $toSend = new CompletedWorkload($booking);
+
+        Mail::to($recipient)->queue($toSend);
     }
 
     public function updateBookingStatus(Booking $booking, User $employee, int $newWorkloadStatus)
