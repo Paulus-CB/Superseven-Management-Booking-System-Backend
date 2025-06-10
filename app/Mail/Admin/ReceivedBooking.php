@@ -24,14 +24,14 @@ class ReceivedBooking extends Mailable
     private string $bookingDate;
     private string $bookingAddress;
     private int $status;
-    private string $receipient;
+    private string $recipient;
 
 
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Booking $booking, string $receipient)
+    public function __construct(Booking $booking, string $recipient)
     {
         $this->bookingId = $booking->id;
         $this->clientName = $booking->customer ? $booking->customer->full_name : null;
@@ -41,7 +41,7 @@ class ReceivedBooking extends Mailable
         $this->bookingDate = $booking->booking_date;
         $this->bookingAddress = $booking->booking_address;
         $this->status = $booking->booking_status;
-        $this->receipient = $receipient;
+        $this->recipient = $recipient;
     }
 
     /**
@@ -90,7 +90,7 @@ class ReceivedBooking extends Mailable
             'link' => [
                 'url' => config('app.frontend_url') . "/bookings/{$this->bookingId}",
             ],
-            'receipient' => $this->receipient
+            'receipient' => $this->recipient
         ];
 
         return $details;
