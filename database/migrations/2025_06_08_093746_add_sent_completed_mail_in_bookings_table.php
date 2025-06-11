@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->smallInteger('sent_completed_mail')->after('completion_date')->default(0);
+            $table->boolean('sent_completed_mail')->after('completion_date')->default(false);
         });
     }
 
