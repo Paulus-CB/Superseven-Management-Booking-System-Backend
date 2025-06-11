@@ -21,6 +21,13 @@
 {{-- Footer --}}
 <x-slot:footer>
 <x-mail::footer>
+{{ 'This is an automated notification. Please do not reply to this message.' }}
+
+**{{ 'Contact us:' }}**
+
+@include('mail.components.contact-footer')
+
+
 © {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}
 </x-mail::footer>
 </x-slot:footer>
