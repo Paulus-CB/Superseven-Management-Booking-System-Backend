@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Http\Requests\ReschedBookingRequest;
+use App\Mail\Admin\CancelledBooking;
 use App\Mail\Admin\ReceivedBooking;
 use App\Mail\Admin\ReceivedReschedule;
+use App\Mail\Client\CancelledBooking as ClientCancelledBooking;
 use App\Mail\Client\CompletedBooking;
 use App\Mail\Client\CompletedReschedule;
 use App\Models\AddOn;
@@ -185,6 +186,43 @@ class BookingService
         }
 
         $toSend = new CompletedReschedule($booking);
+
+        Mail::to($booking->customer->email)->queue($toSend);
+    }
+
+    public function sendCancellationMail(Booking $booking): bool
+    {
+        $adminSent = $this->sendCancelMailToAdmin($booking);
+        $customerSent = $this->sendCancelMailToCustomer($booking);
+        
+        return $adminSent && $customerSent;
+    }
+
+    private function sendCancelMailToAdmin(Booking $booking)
+    {
+        $recipients = User::has('employee')
+            ->whereHas('employee', function ($query) {
+                $query->where('employee_type', User::OWNER_TYPE);
+            })->get();
+        
+        if (!$recipients) {
+            return false;
+        }
+
+        foreach ($recipients as $recipient) {
+            $toSend = new CancelledBooking($booking, $recipient->first_name);
+
+            Mail::to($recipient->email)->queue($toSend);
+        }
+    }
+
+    private function sendCancelMailToCustomer(Booking $booking)
+    {
+        if (!$booking) {
+            return false;
+        }
+
+        $toSend = new ClientCancelledBooking($booking);
 
         Mail::to($booking->customer->email)->queue($toSend);
     }
