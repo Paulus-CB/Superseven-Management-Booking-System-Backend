@@ -52,9 +52,6 @@ class Booking extends Model
         self::STATUS_FOR_RELEASE => 'For Release',
     ];
 
-    public const MAIL_NOT_SENT = 0;
-    public const MAIL_SENT = 1;
-
     /**
      * The attributes that are mass assignable.
      *
