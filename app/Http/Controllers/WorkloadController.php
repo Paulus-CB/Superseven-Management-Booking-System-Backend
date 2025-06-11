@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 class WorkloadController extends BaseController
 {
     private WorkloadService $workloadService;
-    private const NOT_SENT = 0;
 
     public function __construct(WorkloadService $workloadService)
     {
@@ -79,9 +78,9 @@ class WorkloadController extends BaseController
             $booking->deliverable_status = $request->deliverable_status;
             $booking->link = $request->link;
 
-            if ($booking->sent_completed_mail == Booking::MAIL_NOT_SENT && $request->input('deliverable_status') == Booking::STATUS_COMPLETED) {
+            if ($booking->sent_completed_mail == false && $request->input('deliverable_status') == Booking::STATUS_COMPLETED) {
                 
-                $booking->sent_completed_mail = Booking::MAIL_SENT;
+                $booking->sent_completed_mail = true;
                 $booking->completion_date = now();
 
                 $this->workloadService->sendCompletedMailToClient($booking, $booking->customer->email);
