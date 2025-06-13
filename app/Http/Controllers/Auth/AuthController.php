@@ -65,7 +65,8 @@ class AuthController extends BaseController
         }
 
         // Validate credentials
-        if (!Auth::attempt($credentials)) {
+        $remember = $request->boolean('remember') ? true : false;
+        if (!Auth::attempt($credentials, $remember)) {
             RateLimiter::hit($attemptKey);
 
             return $this->sendError('Invalid credentials.', 401, [
@@ -76,6 +77,9 @@ class AuthController extends BaseController
 
         // Clear failed login attempts on successful login
         RateLimiter::clear($attemptKey);
+
+        // Regenerate session
+        $request->session()->regenerate();
 
         // Generate token for API authentication
         $token = $user->createToken('auth_token')->plainTextToken;
