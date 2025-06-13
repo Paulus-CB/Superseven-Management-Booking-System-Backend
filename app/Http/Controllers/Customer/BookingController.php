@@ -95,6 +95,10 @@ class BookingController extends BaseController
                 $discount
             );
 
+            $this->bookingService->sendReceivedMailToAdmin($booking);
+
+            $this->bookingService->sendSuccessMailToCustomer($booking);
+
             DB::commit();
             return $this->sendResponse('Booking created successfully.', new BookingResource($booking));
         } catch (Exception $exception) {
@@ -164,7 +168,12 @@ class BookingController extends BaseController
 
     public function deleteBooking(int $bookingId)
     {
-        $booking = Booking::find($bookingId);
+        $user = auth()->user();
+
+        $booking = Booking::where('id', $bookingId)
+            ->where('customer_id', $user->id)
+            ->where('booking_status', Booking::STATUS_PENDING)
+            ->first();
 
         if (!$booking) {
             return $this->sendError('Booking not found.', 404);
@@ -173,10 +182,16 @@ class BookingController extends BaseController
         DB::beginTransaction();
         try {
 
+            $booking->deleted_by = $user->full_name;
+            $booking->save();
             $booking->delete();
             $booking->billing()->delete();
 
             DB::commit();
+
+            $deletedBooking = Booking::where('id', $bookingId)->withTrashed()->first();
+            $this->bookingService->sendCancellationMail($deletedBooking);
+
             return $this->sendResponse('Booking deleted successfully.');
         } catch (Exception $exception) {
             DB::rollBack();

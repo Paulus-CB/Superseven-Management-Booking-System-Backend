@@ -85,7 +85,7 @@ class WorkloadController extends BaseController
                 'date_uploaded' => now()
             ]);
 
-            $this->workloadService->updateBookingStatus($booking, $request->workload_status, $user);
+            $this->workloadService->updateBookingStatus($booking, $user, $request->workload_status,);
 
             DB::commit();
             return $this->sendResponse('Workload updated successfully.', new WorkloadResource($booking));

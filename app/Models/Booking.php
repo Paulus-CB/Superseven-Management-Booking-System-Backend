@@ -15,17 +15,10 @@ class Booking extends Model
 {
     use SoftDeletes;
 
-    public const STATUS_PENDING = 0;
+    public const STATUS_PENDING     = 0;
     public const STATUS_APPROVED = 1;
     public const STATUS_REJECTED = 2;
     public const STATUS_FOR_RESCHEDULE = 3;
-    public const STATUS_UNASSIGNED = 0;
-    public const STATUS_SCHEDULED = 1;
-    public const STATUS_UPLOADED = 2;
-    public const STATUS_FOR_EDIT = 3;
-    public const STATUS_EDITING = 4;
-    public const STATUS_FOR_RELEASE = 5;
-    public const STATUS_COMPLETED = 6;
 
     public const STATUS = [
         self::STATUS_PENDING => 'Pending',
@@ -33,6 +26,14 @@ class Booking extends Model
         self::STATUS_REJECTED => 'Rejected',
         self::STATUS_FOR_RESCHEDULE => 'For Reschedule',
     ];
+
+    public const STATUS_UNASSIGNED = 0;
+    public const STATUS_SCHEDULED = 1;
+    public const STATUS_UPLOADED = 2;
+    public const STATUS_FOR_EDIT = 3;
+    public const STATUS_EDITING = 4;
+    public const STATUS_FOR_RELEASE = 5;
+    public const STATUS_COMPLETED = 6;
 
     public const DELIVERABLE_STATUS = [
         self::STATUS_UNASSIGNED => 'Unassigned',
@@ -67,6 +68,7 @@ class Booking extends Model
         'completion_date',
         'discount',
         'link',
+        'sent_completed_mail'
     ];
 
     /**

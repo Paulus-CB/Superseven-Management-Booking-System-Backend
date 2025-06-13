@@ -109,8 +109,14 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'noreply@supersevenstudio.art'),
+        'name' => env('MAIL_FROM_NAME', 'Superseven Studio'),
+    ],
+
+    'contact' => [
+        'email' => env('MAIL_CONTACT_EMAIL'),
+        'phone' => env('MAIL_CONTACT_PHONE'),
+        'address' => env('MAIL_CONTACT_ADDRESS'),
     ],
 
 ];
