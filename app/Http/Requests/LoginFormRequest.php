@@ -33,6 +33,10 @@ class LoginFormRequest extends FormRequest
                 'sometimes',
                 'string',
             ],
+            'remember' => [
+                'nullable',
+                'boolean',
+            ],
         ];
     }
 
