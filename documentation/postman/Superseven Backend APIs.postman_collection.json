@@ -203,9 +203,22 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -213,12 +226,17 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "admin_owner@test.com",
+									"value": "pauljairuscaberte34@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
 									"value": "TestUser123",
+									"type": "text"
+								},
+								{
+									"key": "remember",
+									"value": "false",
 									"type": "text"
 								}
 							]
@@ -486,6 +504,14 @@
 					"response": []
 				},
 				{
+					"name": "test",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
 					"name": "Get Authenticated User",
 					"request": {
 						"method": "GET",
@@ -503,6 +529,28 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
@@ -1097,7 +1145,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/api/customer/bookings?month=6&year=2026",
+									"raw": "{{url}}/api/customer/bookings?month=2&year=2026",
 									"host": [
 										"{{url}}"
 									],
@@ -1109,7 +1157,7 @@
 									"query": [
 										{
 											"key": "month",
-											"value": "6"
+											"value": "2"
 										},
 										{
 											"key": "year",
@@ -1130,22 +1178,22 @@
 									"formdata": [
 										{
 											"key": "booking_date",
-											"value": "2025-07-05",
+											"value": " 2025-07-25  ",
 											"type": "text"
 										},
 										{
 											"key": "event_name",
-											"value": "Lonie's Birthday Picture",
+											"value": " Alexa's 18th Birthday Celebration  ",
 											"type": "text"
 										},
 										{
 											"key": "booking_address",
-											"value": "Loay, Bohol",
+											"value": " Bellevue Resort, Panglao, Bohol",
 											"type": "text"
 										},
 										{
 											"key": "package_id",
-											"value": "3",
+											"value": "2",
 											"type": "text"
 										},
 										{
@@ -1155,9 +1203,13 @@
 										},
 										{
 											"key": "addon_id[1]",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "addon_id[2]",
 											"value": "3",
-											"type": "text",
-											"disabled": true
+											"type": "text"
 										}
 									]
 								},
@@ -1493,20 +1545,20 @@
 									"formdata": [
 										{
 											"key": "booking_date",
-											"value": "2025-06-28",
+											"value": "2025-07-28",
 											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "{{url}}/api/bookings/7/reschedule",
+									"raw": "{{url}}/api/bookings/24/reschedule",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
 										"bookings",
-										"7",
+										"24",
 										"reschedule"
 									]
 								}
@@ -1628,7 +1680,7 @@
 							"formdata": [
 								{
 									"key": "date",
-									"value": "2025-05-01",
+									"value": "2025-09-01",
 									"type": "text"
 								},
 								{
@@ -1890,11 +1942,6 @@
 									"mode": "formdata",
 									"formdata": [
 										{
-											"key": "completion_date",
-											"value": "2025-07-15",
-											"type": "text"
-										},
-										{
 											"key": "deliverable_status",
 											"value": "1",
 											"type": "text"
@@ -1906,14 +1953,13 @@
 										},
 										{
 											"key": "user_id[0]",
-											"value": "6",
+											"value": "3",
 											"type": "text"
 										},
 										{
 											"key": "user_id[1]",
 											"value": "4",
-											"type": "text",
-											"disabled": true
+											"type": "text"
 										}
 									]
 								},
@@ -2094,7 +2140,7 @@
 									]
 								},
 								"url": {
-									"raw": "{{url}}/api/employee/workloads/12/update",
+									"raw": "{{url}}/api/employee/workloads/1/update",
 									"host": [
 										"{{url}}"
 									],
@@ -2102,7 +2148,7 @@
 										"api",
 										"employee",
 										"workloads",
-										"12",
+										"1",
 										"update"
 									]
 								}
@@ -2293,7 +2339,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{url}}/api/report/bookings?year=2025",
+							"raw": "{{url}}/api/report/bookings?booking_year=2025",
 							"host": [
 								"{{url}}"
 							],
@@ -2304,7 +2350,7 @@
 							],
 							"query": [
 								{
-									"key": "year",
+									"key": "booking_year",
 									"value": "2025"
 								}
 							]
@@ -2325,7 +2371,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "{{url}}/api/report/packages?year=2026&month=",
+							"raw": "{{url}}/api/report/packages?package_year=&package_month=",
 							"host": [
 								"{{url}}"
 							],
@@ -2336,11 +2382,11 @@
 							],
 							"query": [
 								{
-									"key": "year",
-									"value": "2026"
+									"key": "package_year",
+									"value": ""
 								},
 								{
-									"key": "month",
+									"key": "package_month",
 									"value": ""
 								}
 							]
@@ -2376,6 +2422,62 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Generate PDF Report",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Paul",
+									"type": "text"
+								},
+								{
+									"key": "mid_name",
+									"value": "Authentico",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Caberte",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "pauljairuscaberte34@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "contact_no",
+									"value": "09292802802",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Hinlayagan Ilaya, Trinidad, Bohol",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/api/generate-report",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"generate-report"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -2397,19 +2499,19 @@
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
-					"if (pm.request.method !== 'GET') {",
+					"if (pm.request.method.toLowerCase !== 'get') {",
 					"    if(pm.environment.get('XSRF-TOKEN')) {",
-					"        pm.request.headers.upsert({",
+					"        pm.request.headers.add({",
 					"            key: 'x-xsrf-token',",
 					"            value: pm.environment.get('XSRF-TOKEN'),",
 					"        });",
 					"    } else { ",
-					"        let csrfRequestUrl = pm.environment.get('url') + '/api/sanctum/csrf-cookie';",
+					"        let csrfRequestUrl = pm.environment.get('url') + \"/api/sanctum/csrf-cookie\";",
 					"        pm.sendRequest(csrfRequestUrl, function(err, res, {cookies}) {",
 					"            let xsrfCookie = cookies.one('XSRF-TOKEN');",
 					"            if (xsrfCookie) {",
 					"                let xsrfToken = decodeURIComponent(xsrfCookie['value']);",
-					"                pm.request.headers.upsert({",
+					"                pm.request.headers.add({",
 					"                    key: 'x-xsrf-token',",
 					"                    value: xsrfToken,",
 					"                });                ",
@@ -2427,7 +2529,7 @@
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
-					"if(pm.response.code === 419) {",
+					"if (pm.response.code === 419) {",
 					"    pm.environment.unset(\"XSRF-TOKEN\");",
 					"}"
 				]

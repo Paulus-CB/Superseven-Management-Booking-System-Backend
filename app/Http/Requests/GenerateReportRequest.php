@@ -22,10 +22,32 @@ class GenerateReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'year' => 'nullable|integer|min:2023',
-            'month' => 'nullable|integer|min:1|max:12',
-            'start_year' => 'nullable|integer|min:2023',
-            'end_year' => 'nullable|integer|min:2023',
+            'booking_year' => [
+                'nullable',
+                'integer',
+                'min:2023',
+            ],
+            'package_year' => [
+                'nullable',
+                'integer',
+                'min:2023',
+            ],
+            'package_month' => [
+                'nullable',
+                'integer',
+                'min:1',
+                'max:12',
+            ],
+            'transaction.start_year' => [
+                'nullable',
+                'integer',
+                'min:2023',
+            ],
+            'transaction.end_year' => [
+                'nullable',
+                'integer',
+                'min:2023',
+            ],
         ];
     }
 }
