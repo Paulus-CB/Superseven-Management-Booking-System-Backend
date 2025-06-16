@@ -54,13 +54,14 @@ class ReportService
 
     public function getTransactions(string $startYear, string $endYear)
     {
-        $bookings = Booking::with('customer', 'package', 'addOns')
+        $bookings = Booking::with('customer', 'package', 'addOns', 'billing')
             ->whereBetween('booking_date', [
                 $startYear . '-01-01 00:00:00',
                 $endYear . '-12-31 23:59:59'
             ])
             ->where('booking_status', Booking::STATUS_APPROVED)
-            ->orderBy('booking_date', 'desc');
+            ->where('deliverable_status', Booking::STATUS_COMPLETED)
+            ->orderBy('booking_date', 'asc');
     
         return $bookings;
     }
