@@ -31,7 +31,7 @@ class UserResource extends JsonResource
                 : ($this->employee
                     ? User::ROLE_TYPES[$this->employee->employee_type]
                     : null),
-            'status' => $this->status,
+            'status' => $this->status ? 'active' : 'disabled',
         ];
     }
 }
