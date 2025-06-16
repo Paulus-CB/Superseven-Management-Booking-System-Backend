@@ -38,12 +38,12 @@ class GenerateReportRequest extends FormRequest
                 'min:1',
                 'max:12',
             ],
-            'transaction.start_year' => [
+            'transaction_start' => [
                 'nullable',
                 'integer',
                 'min:2023',
             ],
-            'transaction.end_year' => [
+            'transaction_end' => [
                 'nullable',
                 'integer',
                 'min:2023',

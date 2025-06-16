@@ -40,8 +40,8 @@ class ReportController extends BaseController
 
     public function getTransactions(GenerateReportRequest $request)
     {
-        $startYear = $request->input('transaction.start_year', now()->year);
-        $endYear = $request->input('transaction.end_year', now()->year);
+        $startYear = $request->input('transaction_start', now()->year);
+        $endYear = $request->input('transaction_end', now()->year);
 
         $bookings = $this->reportService->getTransactions($startYear, $endYear);
 

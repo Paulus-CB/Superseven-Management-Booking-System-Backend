@@ -11,6 +11,7 @@ use App\Http\Controllers\Customer\BillingController as CustomerBillingController
 use App\Http\Controllers\DateController;
 use App\Http\Controllers\Employee\WorkloadController as EmployeeWorkloadController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\GenerateReportController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\User\Customer\CustomerAccountController;
@@ -118,6 +119,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/packages', [ReportController::class, 'getNoOfPackages']);
         Route::get('/transactions', [ReportController::class, 'getTransactions']);
     });
+
+    Route::get('/generate-report', [GenerateReportController::class, 'generatePdf']);
 
     //Customer Routes
     Route::prefix('/customer')->group(function () {

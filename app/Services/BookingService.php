@@ -15,7 +15,9 @@ use App\Models\Customer;
 use App\Models\Package;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class BookingService
@@ -130,34 +132,54 @@ class BookingService
 
     public function sendReceivedMailToAdmin(Booking $booking)
     {
-        $recipients = User::has('employee')
-            ->whereHas('employee', function ($query) {
-                $query->whereIn('employee_type', [
-                    User::OWNER_TYPE,
-                    User::SECRETARY_TYPE   
-                ]);
-            })->get();
-        
-        if (!$recipients) {
+        try {
+            $recipients = User::has('employee')
+                ->whereHas('employee', function ($query) {
+                    $query->whereIn('employee_type', [
+                        User::OWNER_TYPE,
+                        User::SECRETARY_TYPE
+                    ]);
+                })->get();
+    
+            if ($recipients->isEmpty()) {
+                return false;
+            }
+    
+            foreach ($recipients as $recipient) {
+                $toSend = new ReceivedBooking($booking, $recipient->first_name);
+                Mail::to($recipient->email)->queue($toSend);
+            }
+    
+            return true;
+        } catch (Exception $e) {
+            Log::error('Failed to send received booking email to admins.', [
+                'booking_id' => $booking->id,
+                'error' => $e->getMessage(),
+            ]);
+    
             return false;
-        }
-
-        foreach ($recipients as $recipient) {
-            $toSend = new ReceivedBooking($booking, $recipient->first_name);
-
-            Mail::to($recipient->email)->queue($toSend);
         }
     }
 
     public function sendSuccessMailToCustomer(Booking $booking)
     {
-        if (!$booking) {
+        try {
+            if (!$booking || !$booking->customer || !$booking->customer->email) {
+                return false;
+            }
+    
+            $toSend = new CompletedBooking($booking);
+            Mail::to($booking->customer->email)->queue($toSend);
+    
+            return true;
+        } catch (Exception $e) {
+            Log::error('Failed to send completed booking email to customer.', [
+                'booking_id' => $booking->id ?? null,
+                'error' => $e->getMessage(),
+            ]);
+    
             return false;
         }
-
-        $toSend = new CompletedBooking($booking);
-
-        Mail::to($booking->customer->email)->queue($toSend);
     }
 
     public function sendRescheduleMailToAdmin(Booking $booking)

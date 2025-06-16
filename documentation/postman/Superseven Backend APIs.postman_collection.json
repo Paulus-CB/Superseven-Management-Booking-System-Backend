@@ -226,17 +226,17 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "pauljairuscaberte34@gmail.com",
+									"value": "loniejaydalaygon@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "TestUser123",
+									"value": "lonie jay dalaygon",
 									"type": "text"
 								},
 								{
 									"key": "remember",
-									"value": "false",
+									"value": "0",
 									"type": "text"
 								}
 							]
@@ -500,14 +500,6 @@
 								"update"
 							]
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "test",
-					"request": {
-						"method": "GET",
-						"header": []
 					},
 					"response": []
 				},
@@ -1178,37 +1170,37 @@
 									"formdata": [
 										{
 											"key": "booking_date",
-											"value": " 2025-07-25  ",
-											"type": "text"
-										},
-										{
-											"key": "event_name",
-											"value": " Alexa's 18th Birthday Celebration  ",
-											"type": "text"
-										},
-										{
-											"key": "booking_address",
-											"value": " Bellevue Resort, Panglao, Bohol",
+											"value": " 2025-07-22",
 											"type": "text"
 										},
 										{
 											"key": "package_id",
-											"value": "2",
+											"value": " 3",
+											"type": "text"
+										},
+										{
+											"key": "event_name",
+											"value": " Santos-Bautista Beach Wedding",
+											"type": "text"
+										},
+										{
+											"key": "booking_address",
+											"value": " Dumaluan Beach, Panglao",
 											"type": "text"
 										},
 										{
 											"key": "addon_id[0]",
-											"value": "1",
+											"value": " 1",
 											"type": "text"
 										},
 										{
 											"key": "addon_id[1]",
-											"value": "2",
+											"value": " 2",
 											"type": "text"
 										},
 										{
 											"key": "addon_id[2]",
-											"value": "3",
+											"value": " 3",
 											"type": "text"
 										}
 									]
@@ -1340,63 +1332,57 @@
 									"formdata": [
 										{
 											"key": "booking_date",
-											"value": "2025-07-10",
+											"value": " 2025-07-10",
 											"type": "text"
 										},
 										{
 											"key": "package_id",
-											"value": "2",
+											"value": " 1",
 											"type": "text"
 										},
 										{
 											"key": "event_name",
-											"value": "Sample",
+											"value": " Lonie and Kai's Prenup Shoot",
 											"type": "text"
 										},
 										{
 											"key": "booking_address",
-											"value": "Plant Namek",
+											"value": " Chocolate Hills",
 											"type": "text"
 										},
 										{
-											"key": "completion_date",
-											"value": "",
-											"type": "text",
-											"disabled": true
-										},
-										{
 											"key": "addon_id[0]",
-											"value": "1",
+											"value": " 1",
 											"type": "text"
 										},
 										{
 											"key": "addon_id[1]",
-											"value": "3",
+											"value": " 3",
 											"type": "text"
 										},
 										{
 											"key": "first_name",
-											"value": "John",
+											"value": " Lonie Jay",
 											"type": "text"
 										},
 										{
 											"key": "last_name",
-											"value": "Paul",
+											"value": " Dalaygon",
 											"type": "text"
 										},
 										{
 											"key": "address",
-											"value": "Talibon, Bohol",
+											"value": " Loay, Bohol",
 											"type": "text"
 										},
 										{
 											"key": "email",
-											"value": "john@gmail.com",
+											"value": " loniejaydalaygon@gmail.com",
 											"type": "text"
 										},
 										{
 											"key": "contact_no",
-											"value": "09982928192",
+											"value": " 09309472869",
 											"type": "text"
 										}
 									]
@@ -2400,7 +2386,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/report/transactions?start_year=2025&end_year=2026",
+							"raw": "{{url}}/api/report/transactions?transaction_start=2025&transaction_end=2026",
 							"host": [
 								"{{url}}"
 							],
@@ -2411,11 +2397,11 @@
 							],
 							"query": [
 								{
-									"key": "start_year",
+									"key": "transaction_start",
 									"value": "2025"
 								},
 								{
-									"key": "end_year",
+									"key": "transaction_end",
 									"value": "2026"
 								}
 							]
@@ -2433,47 +2419,38 @@
 						"header": [],
 						"body": {
 							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "first_name",
-									"value": "Paul",
-									"type": "text"
-								},
-								{
-									"key": "mid_name",
-									"value": "Authentico",
-									"type": "text"
-								},
-								{
-									"key": "last_name",
-									"value": "Caberte",
-									"type": "text"
-								},
-								{
-									"key": "email",
-									"value": "pauljairuscaberte34@gmail.com",
-									"type": "text"
-								},
-								{
-									"key": "contact_no",
-									"value": "09292802802",
-									"type": "text"
-								},
-								{
-									"key": "address",
-									"value": "Hinlayagan Ilaya, Trinidad, Bohol",
-									"type": "text"
-								}
-							]
+							"formdata": []
 						},
 						"url": {
-							"raw": "{{url}}/api/generate-report",
+							"raw": "{{url}}/api/generate-report?booking_year=2025&package_year=2025&package_month=&transaction_start=2025&transaction_end=2026",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"generate-report"
+							],
+							"query": [
+								{
+									"key": "booking_year",
+									"value": "2025"
+								},
+								{
+									"key": "package_year",
+									"value": "2025"
+								},
+								{
+									"key": "package_month",
+									"value": ""
+								},
+								{
+									"key": "transaction_start",
+									"value": "2025"
+								},
+								{
+									"key": "transaction_end",
+									"value": "2026"
+								}
 							]
 						}
 					},
