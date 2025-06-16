@@ -41,3 +41,10 @@ To optimize your application, you can run the following commands:
 ```bash
 php artisan optimize:clear
 ```
+
+## To run the Project
+```bash
+php artisan serve
+php artisan queue:work
+npm run dev
+```
