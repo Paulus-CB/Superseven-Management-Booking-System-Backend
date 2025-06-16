@@ -94,6 +94,10 @@ class BookingController extends BaseController
                 $discount
             );
 
+            $this->bookingService->sendReceivedMailToAdmin($booking);
+
+            $this->bookingService->sendSuccessMailToCustomer($booking);
+
             DB::commit();
             return $this->sendResponse('Booking created successfully.', new BookingResource($booking));
         } catch (Exception $exception) {
