@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'full_name' => $this->full_name,
             'email' => $this->email,
-            'contact_num' => $this->contact_num,
+            'contact_no' => $this->contact_num,
             'address' => $this->address,
             'email_verified_at' => $this->email_verified_at,
             'user_type' => $this->customer ? 'Customer' : ($this->employee ? 'Employee' : null),
