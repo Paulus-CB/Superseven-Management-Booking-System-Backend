@@ -26,6 +26,8 @@ class User extends Authenticatable
     public const PHOTOGRAPHER_TYPE = 5;
     public const EDITOR_TYPE = 6;
     public const FREELANCER_TYPE = 7;
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 0;
 
     public const ROLE_TYPES = [
         self::CLIENT_TYPE => 'Client',

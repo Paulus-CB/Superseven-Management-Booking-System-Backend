@@ -42,12 +42,18 @@ class BookingService
 
     public function createWalkinCustomer(string $firstName, string $lastName, string $address, string $email, string $contactNo)
     {
+        $first_name = ucfirst(str_replace(' ', '', trim($firstName)));
+        $last_name = strtolower(str_replace(' ', '', trim($lastName)));
+        $rawPassword = $first_name . $last_name . '12345';
+
+        $hashedPassword = Hash::make($rawPassword);
+
         $user = new User();
         $user->first_name = $firstName;
         $user->last_name = $lastName;
         $user->address = $address;
         $user->email = $email;
-        $user->password = Hash::make(strtolower($firstName . ' ' . $lastName));
+        $user->password = $hashedPassword;
         $user->contact_num = $contactNo;
         $user->save();
 
