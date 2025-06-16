@@ -40,14 +40,22 @@ class EmployeeAccountController extends BaseController
 
         DB::beginTransaction();
         try {
+
+            $firstName = ucfirst(str_replace(' ', '', trim($request->first_name)));
+            $lastName = strtolower(str_replace(' ', '', trim($request->last_name)));
+            $rawPassword = $firstName . $lastName . '12345';
+
+            $hashedPassword = Hash::make($rawPassword);
+
             $employee = User::create([
                 'first_name' => $request->first_name,
                 'mid_name' => $request->mid_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
-                'password' => Hash::make($request->first_name . ' ' . $request->last_name),
+                'password' => $hashedPassword,
                 'contact_num' => $request->contact_no,
                 'address' => $request->address,
+                'status' => User::STATUS_ACTIVE,
             ]);
 
             Employee::create([
