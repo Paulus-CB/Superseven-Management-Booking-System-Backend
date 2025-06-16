@@ -46,7 +46,7 @@ class CustomerAccountController extends BaseController
                 'last_name' => $request->last_name,
                 'email' => $request->email,
                 'password' => Hash::make($request->first_name . ' ' . $request->last_name),
-                'contact_no' => $request->contact_no,
+                'contact_num' => $request->contact_no,
                 'address' => $request->address,
             ]);
 
