@@ -89,7 +89,7 @@ class EmployeeAccountController extends BaseController
                 'mid_name'=> $request->mid_name,
                 'last_name'=> $request->last_name,
                 'email'=> $request->email,
-                'contact_no'=> $request->contact_no,
+                'contact_num'=> $request->contact_no,
                 'address'=> $request->address,
                 'status' => $request->status ? 'active' : 'disabled'
             ]);
