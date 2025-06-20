@@ -31,6 +31,12 @@ php artisan migrate --seed
 ## 6. Start the Development Server
 ```bash
 php artisan serve
+
+// For rendering report.blade template for generate reports
+npm run dev
+
+// For mail job queues
+php artisan queue:work
 ```
 
 Now, you can access the application at [http://localhost:8000](http://localhost:8000).
