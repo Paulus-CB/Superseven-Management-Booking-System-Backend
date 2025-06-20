@@ -42,7 +42,7 @@ To optimize your application, you can run the following commands:
 php artisan optimize:clear
 ```
 
-## To run the Project
+## To run the Backend
 ```bash
 php artisan serve
 php artisan queue:work
